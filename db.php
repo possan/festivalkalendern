@@ -5,6 +5,7 @@
 	$ical_ttl = 6*60;
 	$json_file = "/tmp/basic.json";
 	$json_ttl = 7*60;
+    
 	$date = "2011-01";
 	if( isset( $_GET["date"] ) )
 		$date = $_GET["date"];
