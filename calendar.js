@@ -180,7 +180,6 @@ function rendermonth(target, date){
         
         var eventsel = $('<div class="weekevents" />');
         if( data.events )
-        {
         	for( var k=0; k<data.events.length; k++ ){
         		var evt = data.events[k];
         		var d1 = Date.parseExact(evt.start, "yyyy-MM-dd");
@@ -188,29 +187,30 @@ function rendermonth(target, date){
         		if( !evt._used )
         			continue;
         		var eventlineel = $('<div class="weekeventline" />');
-        		var eventel = $('<div/>');
-       			eventel.addClass('weekevent eventstart'+evt._firstcolumn+' eventlength'+(1+evt._lastcolumn-evt._firstcolumn)+' eventcolor'+(k%6));
+        		var eventel = $('<div class="weekevent eventstart'+evt._firstcolumn+' eventlength'+(1+evt._lastcolumn-evt._firstcolumn)+' eventcolor'+(k%6)+'" />');
+        		(function()	{
+            		var evtcopy = evt;
+            		eventel.click(function(){
+            			showpopup(evtcopy);
+            		})
+        		})();
        			var innerel = $('<div class="weekeventinner" />');
       			innerel.html(evt.title);
       			eventel.append(innerel);
       			eventlineel.append(eventel);
      			eventsel.append(eventlineel[0]);
         	}
-    	}
     	weekel.append(eventsel);
         weeksel.append(weekel);
     }
     
-    var eventsel = $('<div class="events" />');
-    if( data.events )
-    	for( var j=0; j<data.events.length; j++ ){
-    		var evt = data.events[j];
-    		var eventel = $('<div class="event" />');
-    		eventel.innerHTML = 'event '+evt.title+' '+evt.start+' - '+evt.end;
-    		eventsel.append(eventel);
-    	}
-    rootel.append(eventsel);
-    
+    /*
+	 * var eventsel = $('<div class="events" />'); if( data.events ) for( var
+	 * j=0; j<data.events.length; j++ ){ var evt = data.events[j]; var eventel =
+	 * $('<div class="event" />'); eventel.innerHTML = 'event '+evt.title+'
+	 * '+evt.start+' - '+evt.end; eventsel.append(eventel); }
+	 * rootel.append(eventsel);
+	 */
     $(target).html('');
     $(target).append(rootel);
     
@@ -239,6 +239,12 @@ function initmonth(){
     var d = Date.today();
     currentmonth = d.toString("yyyy-MM");
     rendernextslide();
+    
+    $('.monthviewport').swipe({ 
+    	swipeLeft: function() { changemonth(1); },
+        swipeRight: function() { changemonth(-1); }
+    });
+
 }
 
 function inittags(){
@@ -257,12 +263,18 @@ function rendertags(){
 }
 
 function firstrun(){
+	
+	  FB.init({appId  : '163843053669018',status : true,cookie : true,xfbml  : false });
+	  
     inittags();
     initmonth();
-    $('.monthviewport').swipe({ 
-    	swipeLeft: function() { changemonth(1); },
-        swipeRight: function() { changemonth(-1); }
-    });
+    initpopup();
+}
+
+function initpopup(){
+	$('#popupclose').click(function(){
+		hidepopup();
+	})
 }
 
 function rendernextslide(dir){
@@ -291,12 +303,11 @@ function rendernextslide(dir){
     visiblelayer.className = 'monthwrapper offside';
     nextlayer.className = 'monthwrapper current';
 
-    $(visiblelayer).css({ 'left': visiblestart + 'px', 'opacity':1.0 });
-    $(nextlayer).css({ 'left': nextstart + 'px', 'opacity':0.0 });
-    $(visiblelayer).animate({ 'left': visibleend + 'px', 'opacity':1.0 },400,'easeInCubic');
-    setTimeout(function(){ $(nextlayer).animate({ 'left': nextend + 'px', 'opacity':1.0 },500,'easeOutCubic'); },200);
+    $(visiblelayer).css({ 'left': visiblestart + 'px' });
+    $(nextlayer).css({ 'left': nextstart + 'px' });
+    $(visiblelayer).animate({ 'left': visibleend + 'px' },400,'easeInCubic');
+    setTimeout(function(){ $(nextlayer).animate({ 'left': nextend + 'px' },500,'easeOutCubic'); },100);
 }
-
 
 function changemonth(delta){
 	debug('change month ' + delta);
@@ -308,4 +319,26 @@ function changemonth(delta){
     currentmonth = d.toString('yyyy-MM');
     debug('new tag: ', currentmonth);
     rendernextslide(-delta);
+}
+
+g_lastpopupdata = {};
+function showpopup( data ){
+	g_lastpopupdata = data;
+	debug(data)
+	$("#popupcontent").html('');
+	$("#popupcontent").append($('<h1/>').text(data.title));
+	if( data.metadata ){
+		$("#popupcontent").append('<p/>').append(data.metadata.description);
+		if( data.metadata.link ) {
+			$("#popupcontent").append('<p>L&auml;s mer: <a href="'+data.metadata.link+'">'+data.metadata.link+'</a></p>');			
+			$("#popupcontent").append('<iframe src="http://www.facebook.com/widgets/like.php?href='+data.metadata.link+'" scrolling="no" frameborder="0" style="border:none; width:450px; height:80px"></iframe>');
+		}
+	}
+	
+    $('#popup').css({ 'left':'100px','top':'130px','opacity':0.0,'display':'block' });
+    $('#popup').animate({ 'left':'100px','top':'100px','opacity':1.0 },500,'easeOutCubic');
+}
+
+function hidepopup(){
+    $('#popup').animate({ 'left':'100px','top':'140px','opacity':0.0},300,'easeInCubic' );
 }

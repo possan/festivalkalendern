@@ -207,3 +207,21 @@ a.next, a.previous {
 .eventcolor5 {	
 	background-color: #8ff;
 }
+
+#popup {
+	position: absolute;
+	display: none;
+	background-color: #cfc;
+}
+
+#popupclose{
+	float: right;	
+	color: #f00;
+	font-weight: bold;
+}
+
+#popupcontent{
+	background-color: #fff;
+	margin: 10px;
+	padding: 10px;
+}
