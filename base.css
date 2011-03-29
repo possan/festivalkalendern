@@ -1,0 +1,127 @@
+.pagetop{
+	height: 100px;
+	border: 1px solid #f00;
+}
+
+.monthviewport {
+    position: relative;
+    width: 800px;
+    height: 1000px;
+    overflow: hidden;
+}
+
+.monthwrapper {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 800px;
+}
+
+.month {
+    padding: 20px;
+}
+
+.month .top {
+    height: 100px;
+    position: relative;
+}
+
+.month .top .previous {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    padding: 5px;
+	font-size: 200%;
+}
+
+.month .top .next {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 5px;
+	font-size: 200%;
+}
+
+.month .top .title {
+    position: absolute;
+    left: 200px;
+    width: 400px;
+    top: 0px;
+    padding: 5px;
+    text-align: center;
+	font-size: 300%;
+}
+
+.month .weeks {
+    border: 1px solid #f0f;
+    padding: 5px;
+}
+
+a.next, a.previous {
+    color: #04c;
+    cursor: pointer;
+}
+
+.week {
+    height: 100px;
+    position: relative;
+}
+
+.weeknumber {
+	position: absolute;
+	left: 0px;
+	top: 35px;
+	text-align: center;
+	width: 45px;
+    color: #eee;
+	font-size: 200%;
+}
+
+.week .day {
+    border: 1px solid #eee;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 97px;
+    height: 97px;
+}
+
+.week .day .daynumber {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+    color: #ddd;
+	font-size: 250%;
+}
+
+.week .last {
+    clear: both;
+}
+
+.week .day.column0 {
+    left: 50px;
+}
+
+.week .day.column1 {
+    left: 150px;
+}
+
+.week .day.column2 {
+    left: 250px;
+}
+
+.week .day.column3 {
+    left: 350px;
+}
+
+.week .day.column4 {
+    left: 450px;
+}
+
+.week .day.column5 {
+    left: 550px;
+}
+
+.week .day.column6 {
+    left: 650px;
+}
