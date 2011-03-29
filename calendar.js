@@ -259,7 +259,7 @@ function rendertags(){
 function firstrun(){
     inittags();
     initmonth();
-    $('#monthviewport').swipe({ 
+    $('.monthviewport').swipe({ 
     	swipeLeft: function() { changemonth(-1); },
         swipeRight: function() { changemonth(1); }
        });
