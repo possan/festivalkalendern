@@ -8,44 +8,9 @@ if( console )
 		console.log(x);
 }
  
-var tagcache = {
-    "lastupdate": "timestamp",
-    "tags": [{
-        "tag": "a",
-        "count": 2,
-        "weight": 1.00,
-        "size": 1.00
-    }, {
-        "tag": "b",
-        "count": 1,
-        "weight": 0.5,
-        "size": 0.00
-    }, {
-        "tag": "c",
-        "count": 1,
-        "weight": 0.5,
-        "size": 0.00
-    }]
-};
+var tagcache = { "lastupdate": "timestamp", "tags": [] };
 
-var monthcache = {
-    "2011-02": {
-        "lastupdate": "timestamp",
-        "items": [{
-            "from": "2011-01-29",
-            "to": "2012-02-10",
-            "title": "XYZ 1",
-            "link": "link1",
-            "tags": ["a", "b"]
-        }, {
-            "from": "2011-02-15",
-            "to": "2012-02-20",
-            "title": "XYZ 2",
-            "link": "link2",
-            "tags": ["a", "c"]
-        }]
-    }
-};
+var monthcache = { };
  
 function loadmonthdata(month, callback){
     debug('loadmonthdata', month);
@@ -113,9 +78,7 @@ function buildmonthlayout(tag){
             day: d
         });
         var testweek = testdate.getWeekOfYear();
-        // console.log('testweek: ' + testweek);
         if (testweek != lastweek) {
-            // console.log('new week: ' + testweek);
             if (lastweek != -1) 
                 data.weeks.push(weekdata);
             lastweek = testweek;
@@ -135,8 +98,6 @@ function buildmonthlayout(tag){
         };
         data.cells.push(cell);
         weekdata.cells.push(cell);
-        // console.log('day ' + d + ':', testdate, 'column:', c,
-		// 'row:', r);
     };
     data.weeks.push(weekdata);
     debug(data);
@@ -149,110 +110,109 @@ function rendermonth(target, date){
     if( typeof(monthcache[date]) != 'undefined' )	
     	data = monthcache[date];
     debug(data);
-    var rootel = document.createElement('div');
-    rootel.className = 'month';
     
-    var topel = document.createElement('div');
-    topel.className = 'top';
-    rootel.appendChild(topel);
+    var rootel = $('<div class="month" />');
+    var topel = $('<div class="top" />');
+    rootel.append(topel);
     {
-	    var prevbutton = document.createElement('a');
-	    prevbutton.className = 'previous';
-	    prevbutton.appendChild(document.createTextNode('<< previous'));
-	    $(prevbutton).click(function(){
-	        prevmonth();
+	    var prevbutton = $('<a class="previous" />');
+	    prevbutton.text('<< previous');
+	    prevbutton.click(function(){
+	        changemonth(-1);
 	    });
-	    topel.appendChild(prevbutton);
-	    
-	    topel.appendChild(document.createTextNode(' '));
-	    
-	    var titleel = document.createElement('span');
-	    titleel.className = 'title';
-	    titleel.appendChild(document.createTextNode(layout.date.toString("MMMM, yyyy")));
-	    topel.appendChild(titleel);
-	    
-	    topel.appendChild(document.createTextNode(' '));
-	    
-	    var nextbutton = document.createElement('a');
-	    nextbutton.className = 'next';
-	    nextbutton.appendChild(document.createTextNode('next >>'));
-	    $(nextbutton).click(function(){
-	        nextmonth();
+	    topel.append(prevbutton);
+	    topel.append(' ');
+	    var titleel = $('<span class="title" />');
+	    titleel.text(layout.date.toString("MMMM, yyyy"));
+	    topel.append(titleel);
+	    topel.append(' ');
+	    var nextbutton = $('<a class="next" />');
+	    nextbutton.text('next >>');
+	    nextbutton.click(function(){
+	        changemonth(1);
 	    });
-	    topel.appendChild(nextbutton);
+	    topel.append(nextbutton);
     }
     
-    var weeksel = document.createElement('div');
-    weeksel.className = 'weeks';
-    rootel.appendChild(weeksel);
+    var weeksel = $('<div class="weeks" />');
+    rootel.append(weeksel);
 
     for (var j = 0; j < layout.weeks.length; j++) {
         
     	var weekdata = layout.weeks[j];
-        var weekel = document.createElement('div');
-        weekel.className = 'week';
-        var numberel = document.createElement('div');
-        numberel.className = 'weeknumber';
-        numberel.appendChild(document.createTextNode(weekdata.number));
-        weekel.appendChild(numberel);
-    
-        for (var k = 0; k < weekdata.cells.length; k++) {
-        	
-            var celldata = weekdata.cells[k];
-            var cellel = document.createElement('div');
-            cellel.className = 'day column'+celldata.column;
-            var numberel = document.createElement('div');
-            numberel.className = 'daynumber';
-            numberel.appendChild(document.createTextNode(celldata.date.toString("dd")));
-            cellel.appendChild(numberel);
-            weekel.appendChild(cellel);
+        var weekel = $('<div class="week" />');
+        var numberel = $('<div class="weeknumber" />');
+        numberel.text(weekdata.number);
+        weekel.append(numberel);
+
+        if( data.events )
+        	for( var l=0; l<data.events.length; l++ ){
+        		var evt = data.events[l];
+        		evt._firstcolumn = 99;
+        		evt._lastcolumn = -99;
+        		evt._used = false;
+        	}
         
+        for (var k = 0; k < weekdata.cells.length; k++) {        	
+            var celldata = weekdata.cells[k];
+            var cellel = $('<div class="day column'+celldata.column+'" />' );
+            var numberel = $('<div class="daynumber" />');
+            numberel.text(celldata.date.toString("dd"));
+            cellel.append(numberel);            
+            if( data.events )
+            	for( var l=0; l<data.events.length; l++ ){
+            		var evt = data.events[l];
+            		var d1 = Date.parseExact(evt.start, "yyyy-MM-dd");
+            		var d2 = Date.parseExact(evt.end, "yyyy-MM-dd");
+            		if( d1 <= celldata.date && d2 > celldata.date)
+            		{
+            			if( celldata.column < evt._firstcolumn )
+            				evt._firstcolumn = celldata.column;
+            			if( celldata.column > evt._lastcolumn )
+            				evt._lastcolumn = celldata.column;
+            			evt._used = true;
+            		}
+           		}
+            weekel.append(cellel);
         }
         
-        var lastel = document.createElement('div');
-        lastel.className = 'last';
-        weekel.appendChild(lastel);
-    
-
-        var eventsel = document.createElement('div');
-        eventsel.className ='weekevents';
+        weekel.append($('<div class="last" />'));
+        
+        var eventsel = $('<div class="weekevents" />');
         if( data.events )
         {
         	for( var k=0; k<data.events.length; k++ ){
         		var evt = data.events[k];
         		var d1 = Date.parseExact(evt.start, "yyyy-MM-dd");
         		var d2 = Date.parseExact(evt.end, "yyyy-MM-dd");
-
-        		if( d1 > weekdata.date )
-        		{
-        			var eventel = document.createElement('div');
-        			eventel.className ='weekevent';
-        			eventel.innerHTML = 'event '+evt.title+' '+evt.start+' - '+evt.end;
-        			eventsel.appendChild(eventel);
-        		}
-       		}
+        		if( !evt._used )
+        			continue;
+        		var eventlineel = $('<div class="weekeventline" />');
+        		var eventel = $('<div/>');
+       			eventel.addClass('weekevent eventstart'+evt._firstcolumn+' eventlength'+(1+evt._lastcolumn-evt._firstcolumn)+' eventcolor'+(k%6));
+       			var innerel = $('<div class="weekeventinner" />');
+      			innerel.html(evt.title);
+      			eventel.append(innerel);
+      			eventlineel.append(eventel);
+     			eventsel.append(eventlineel[0]);
+        	}
     	}
-    	weeksel.appendChild(eventsel);
-        
-        
-        weeksel.appendChild(weekel);
-    
+    	weekel.append(eventsel);
+        weeksel.append(weekel);
     }
     
-    var eventsel = document.createElement('div');
-    eventsel.className ='events';
+    var eventsel = $('<div class="events" />');
     if( data.events )
     	for( var j=0; j<data.events.length; j++ ){
     		var evt = data.events[j];
-    		var eventel = document.createElement('div');
-    		eventel.className ='event';
+    		var eventel = $('<div class="event" />');
     		eventel.innerHTML = 'event '+evt.title+' '+evt.start+' - '+evt.end;
-    		eventsel.appendChild(eventel);
+    		eventsel.append(eventel);
     	}
-    rootel.appendChild(eventsel);
+    rootel.append(eventsel);
     
-    target.innerHTML = '';
-    target.appendChild(rootel);
+    $(target).html('');
+    $(target).append(rootel);
     
     refreshdatecache(date, function(){
         rendermonth(target, date);
@@ -299,6 +259,10 @@ function rendertags(){
 function firstrun(){
     inittags();
     initmonth();
+    $('#monthviewport').swipe({ 
+    	swipeLeft: function() { changemonth(-1); },
+        swipeRight: function() { changemonth(1); }
+       });
 }
 
 function rendernextslide(dir){
@@ -323,10 +287,10 @@ function rendernextslide(dir){
     var visibleend = (dir == 1) ? offside : -offside;
     var nextend = 0;
     var nextstart =  (dir == 1) ? -offside : offside;
-    
+
     visiblelayer.className = 'monthwrapper offside';
     nextlayer.className = 'monthwrapper current';
-    
+
     $(visiblelayer).css({ 'left': visiblestart + 'px', 'opacity':1.0 });
     $(nextlayer).css({ 'left': nextstart + 'px', 'opacity':0.0 });
     $(visiblelayer).animate({ 'left': visibleend + 'px', 'opacity':1.0 },400,'easeInCubic');
@@ -344,12 +308,4 @@ function changemonth(delta){
     currentmonth = d.toString('yyyy-MM');
     debug('new tag: ', currentmonth);
     rendernextslide(-delta);
-}
-
-function prevmonth(){
-    changemonth(-1);
-}
-
-function nextmonth(){
-    changemonth(1);
 }

@@ -1,12 +1,12 @@
-.pagetop{
-	height: 100px;
-	border: 1px solid #f00;
+.pagetop {
+    height: 100px;
+    border: 1px solid #f00;
 }
 
 .monthviewport {
     position: relative;
     width: 800px;
-    height: 1000px;
+    height: 1100px;
     overflow: hidden;
 }
 
@@ -31,7 +31,7 @@
     left: 0px;
     top: 0px;
     padding: 5px;
-	font-size: 200%;
+    font-size: 200%;
 }
 
 .month .top .next {
@@ -39,7 +39,7 @@
     right: 0px;
     top: 0px;
     padding: 5px;
-	font-size: 200%;
+    font-size: 200%;
 }
 
 .month .top .title {
@@ -49,7 +49,7 @@
     top: 0px;
     padding: 5px;
     text-align: center;
-	font-size: 300%;
+    font-size: 300%;
 }
 
 .month .weeks {
@@ -63,18 +63,18 @@ a.next, a.previous {
 }
 
 .week {
-    height: 100px;
+    height: 120px;
     position: relative;
 }
 
 .weeknumber {
-	position: absolute;
-	left: 0px;
-	top: 35px;
-	text-align: center;
-	width: 45px;
+    position: absolute;
+    left: 0px;
+    top: 35px;
+    text-align: center;
+    width: 45px;
     color: #eee;
-	font-size: 200%;
+    font-size: 200%;
 }
 
 .week .day {
@@ -83,45 +83,116 @@ a.next, a.previous {
     left: 0px;
     top: 0px;
     width: 97px;
-    height: 97px;
+    height: 117px;
 }
 
 .week .day .daynumber {
-	position: absolute;
-	left: 10px;
-	top: 10px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
     color: #ddd;
-	font-size: 250%;
+    font-size: 250%;
 }
 
 .week .last {
     clear: both;
 }
 
-.week .day.column0 {
+.week .weekevents {
+    position: absolute;
+    left: 0px;
+    top: 60px;
+}
+
+.weekevents .weekeventline {
+    position: relative;
+    height: 14px;
+}
+
+.weekevents .weekevent {
+    position: absolute;
+	padding: 0px;
+}
+
+.weekevents .weekevent .weekeventinner {
+	padding: 5px;
+}
+
+.week .day.column0, .weekevents .eventstart0 {
     left: 50px;
 }
 
-.week .day.column1 {
+.week .day.column1, .weekevents .eventstart1 {
     left: 150px;
 }
 
-.week .day.column2 {
+.week .day.column2, .weekevents .eventstart2 {
     left: 250px;
 }
 
-.week .day.column3 {
+.week .day.column3, .weekevents .eventstart3 {
     left: 350px;
 }
 
-.week .day.column4 {
+.week .day.column4, .weekevents .eventstart4 {
     left: 450px;
 }
 
-.week .day.column5 {
+.week .day.column5, .weekevents .eventstart5 {
     left: 550px;
 }
 
-.week .day.column6 {
+.week .day.column6, .weekevents .eventstart6 {
     left: 650px;
+}
+
+.weekevents .eventlength1 {
+    width: 95px;
+}
+
+.weekevents .eventlength2 {
+    width: 195px;
+}
+
+.weekevents .eventlength3 {
+    width: 295px;
+}
+
+.weekevents .eventlength4 {
+    width: 395px;
+}
+
+.weekevents .eventlength5 {
+    width: 495px;
+}
+
+.weekevents .eventlength6 {
+    width: 595px;
+}
+
+.weekevents .eventlength7 {
+    width: 695px;
+}
+
+.eventcolor0 {
+	background-color: #ff8;
+}
+
+.eventcolor1 {
+	background-color: #f88;
+}
+
+.eventcolor2 {	
+	background-color: #88f;
+}
+
+.eventcolor3 {
+	background-color: #8f8;
+}
+
+.eventcolor4 {	
+	background-color: #f8f;
+}
+.eventcolor5 {	
+	background-color: #8ff;
 }
