@@ -260,9 +260,9 @@ function firstrun(){
     inittags();
     initmonth();
     $('.monthviewport').swipe({ 
-    	swipeLeft: function() { changemonth(-1); },
-        swipeRight: function() { changemonth(1); }
-       });
+    	swipeLeft: function() { changemonth(1); },
+        swipeRight: function() { changemonth(-1); }
+    });
 }
 
 function rendernextslide(dir){
