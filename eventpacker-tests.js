@@ -331,6 +331,9 @@ EventPackerTests = function() {
 			right : 10
 		} ]);
 		equals(ml.callcount, 1, "call counter");
+		equals(ml.lastarg.create[0], 'b', "create item 1");
+		equals(ml.lastarg.create[1], 'c', "create item 2");
+		equals(ml.lastarg.create.length, 2, "create item count");
 		p.hideItem('b');
 		equals(ml.callcount, 2, "call counter");
 		equals(ml.lastarg.hide[0], 'b', "hide item 1");
