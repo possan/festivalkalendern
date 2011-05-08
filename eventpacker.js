@@ -1,9 +1,8 @@
 EventPacker = function() {
-
+	var obs = new Observable();
 	var locals = {
 		MAXLINES : 30,
 		events : [],
-		changelinecallbacks : [],
 		_getItem : function(id) {
 			for ( var k = 0; k < locals.events.length; k++)
 				if (locals.events[k].id == id)
@@ -11,9 +10,7 @@ EventPacker = function() {
 			return null;
 		},
 		_fireChange : function(arg) {
-			$.each(locals.changelinecallbacks, function() {
-				this.call(this, ret, arg);
-			});
+			obs.call(arg);
 		},
 		_addItem : function(item) {
 			var test = locals._getItem(item.id);
@@ -113,7 +110,7 @@ EventPacker = function() {
 
 			if (movelist.length > 0 || showlist.length > 0
 					|| hidelist.length > 0 || createlist.length > 0) {
-				locals._fireChange( {
+				obs.fire( {
 					create : createlist,
 					show : showlist,
 					hide : hidelist,
@@ -175,11 +172,8 @@ EventPacker = function() {
 			evt.hidden = true;
 			locals._checkChanges();
 		},
-		fireChange : function(arg) {
-			locals._fireChange(arg);
-		},
 		addListener : function(cb) {
-			locals.changelinecallbacks.push(cb);
+			obs.addListener(cb);
 		}
 	};
 

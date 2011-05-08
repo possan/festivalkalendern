@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <script type="text/javascript" src="jquery.js">
+        </script>
+        <script type="text/javascript" src="jquery.easing.1.3.js">
+        </script>
+        <script type="text/javascript" src="eventpacker.js">
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+            
+                var allitems = [];
+                var counter = 0;
+                
+                var ep = new EventPacker();
+                
+                ep.addListener(function(inst, arg){
+                
+                    for (var i = 0; i < arg.create.length; i++) {
+                        var domid = arg.create[i];
+                        var item = inst.getItem(domid);
+                        $('#' + domid).css({
+                            height: '1px',
+                            top: (item.line * 40) + 'px',
+                            opacity: 0
+                        });
+                        $('#' + domid).animate({
+                            height: '30px',
+                            opacity: 1
+                        }, 200, 'easeInOutQuart');
+                    }
+                    
+                    for (var i = 0; i < arg.show.length; i++) {
+                        var domid = arg.show[i];
+                        var item = inst.getItem(domid);
+                        $('#' + domid).animate({
+                            opacity: 1
+                        }, 200, 'easeInOutQuart');
+                    }
+                    
+                    for (var i = 0; i < arg.hide.length; i++) {
+                        var domid = arg.hide[i];
+                        var item = inst.getItem(domid);
+                        $('#' + domid).animate({
+                            opacity: 0.1
+                        }, 200, 'easeInOutQuart');
+                    }
+                    
+                    for (var i = 0; i < arg.move.length; i++) {
+                        var domid = arg.move[i];
+                        var item = inst.getItem(domid);
+                        $('#' + domid).animate({
+                            top: (item.line * 40) + 'px'
+                        }, 400, 'easeOutBounce');
+                    }
+                });
+                
+                function addsome(){
+                    var newitems = [];
+                    var n = 1 + Math.round(Math.random() * 4);
+                    for (var i = 0; i < n; i++) {
+                        var l = 20 + Math.round(Math.random() * 100) * 10;
+                        var w = 20 + Math.round(Math.random() * 50) * 10;
+                        var r = l + w;
+                        var el = document.createElement();
+                        el.className = 'block';
+                        el.id = 'x' + counter;
+                        el.style.left = l + 'px';
+                        el.style.width = w + 'px';
+                        el.innerHTML = '<span>Some text</span>';
+                        $('#dummy').append(el);
+                        newitems.push({
+                            id: 'x' + counter,
+                            left: l,
+                            right: r
+                        });
+                        counter++;
+                    }
+                    ep.addItems(newitems);
+                    
+                }
+                
+                $('#addsome').click(function(){
+                    addsome();
+                });
+                
+                $('#togglesome').click(function(){
+                    ep.filter(function(el){
+                        return (Math.round(Math.random() * 2) == 1);
+                    });
+                });
+                
+                $('#showall').click(function(){
+                    ep.filter(function(el){
+                        return true;
+                    });
+                });
+                
+                addsome();
+                addsome();
+                addsome();
+            });
+        </script>
+        <style>
+            
+            #dummy {
+                position: relative;
+            }
+            
+            #dummy .block {
+                position: absolute;
+                background-color: #fc8;
+                height: 20px;
+                border-radius: 10px;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            
+            #dummy .block span {
+                display: block;
+                padding: 6px 10px;
+                font: 10pt Verdana;
+                color: #fff;
+            }
+            
+            .actions {
+                padding: 10px;
+                margin: 0;
+                color: #888;
+            }
+            
+            .actions a {
+                display: inline-block;
+                padding: 5px 10px;
+                background-color: #4ac;
+                font: 10pt Helvetica, Arial;
+                font-weight: bold;
+                color: #fff;
+                border-radius: 10px;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;
+                cursor: pointer;
+            }
+            
+            .actions a:hover {
+                background-color: #6cf;
+            }
+            
+            h1 {
+                font: 30pt Helvetica, Arial;
+                font-weight: 900;
+                letter-spacing: -2px;
+                padding: 10px;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>korvalender /// event packing example</h1>
+        <p class="actions">
+            <a id="addsome">ADD SOME</a>
+            <a id="togglesome">HIDE/SHOW RANDOM</a>
+            <a id="showall">SHOW ALL</a>
+        </p>
+        <div id="dummy">
+        </div>
+    </body>
+</html>
