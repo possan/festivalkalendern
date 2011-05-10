@@ -1,202 +1,166 @@
 <html>
-    <head>
-        <script type="text/javascript" src="jquery.js">
-        </script>
-        <script type="text/javascript" src="jquery.easing.1.3.js">
-        </script>
-        <script type="text/javascript" src="jquery.mousewheel.js">
-        </script>
-        <script type="text/javascript" src="observable.js">
-        </script>
-        <script type="text/javascript" src="eventpacker.js">
-        </script>
-        <script type="text/javascript" src="timeline.js">
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-            
-                var inner1 = $('<div>');
-                inner1.className = 'innerdemo';
-                $('#demo1').empty().append(inner1);
-                
-                regeneratepoints = function(){
-                    var el1 = $('<div>');
-                    for (var k = 0; k < 50; k++) {
-                        var x = tc.getPositionFromTime(k * 30);
-                        
-                        var el2 = $('<div>');
-                        el2.css({
-                            position: 'absolute',
-                            left: x + 'px'
-                        });
-                        el2.text(k.toString());
-                        el1.append(el2);
-                    }
-                    inner1.empty().append(el1);
-                }
-                positionpoints = function(){
-                    var x = tc.getPositionFromTime(0);
-                    console.log(x);
-                    inner1.css({
-                        position: 'absolute',
-                        left: x + 'px'
-                    });
-                }
-                
-                var tc = new TimelineController();
-                
-                tc.addListener(function(e){
-                    positionpoints();
-                    if (e.zoomed) 
-                        regeneratepoints();
-                });
-                
-                tc.setWidth(700);
-                tc.setTimeSpan(100);
-                tc.setTimeOffset(0);
-                
-                positionpoints();
-                regeneratepoints();
-                
-                $.fn.maketimeline = function(){
-                    var obj = this;
-                    
-                    var tic = new TimelineInputController(obj, tc);
-                    /*
-                     var drag_on = false;
-                     var drag_down_x = 0;
-                     var drag_down_t = 0;
-                     var drag_down_o = 0;
-                     var draw_down_p = 0;
-                     
-                     $(obj).mousedown(function(e){
-                     drag_on = true;
-                     drag_down_x = e.pageX;
-                     drag_down_t = tc.getTimeFromPosition(drag_down_x);
-                     drag_down_o = tc.getTimeOffset();
-                     drag_down_p = tc.getPanOffset();
-                     });
-                     $(obj).mousemove(function(e){
-                     if (drag_on) {
-                     //       tc.setTimeOffset(drag_down_o - (t - drag_down_t));
-                     tc.setPanOffset(drag_down_p + (e.pageX - drag_down_x));
-                     }
-                     });
-                     $(obj).mouseup(function(e){
-                     var t = tc.getTimeFromPosition(e.pageX);
-                     if (drag_on) {
-                     tc.setTimeOffset(drag_down_o - (t - drag_down_t));
-                     }
-                     drag_on = false;
-                     });
-                     $(obj).mousewheel(function(e, delta){
-                     });
-                     $(obj).click(function(e){
-                     });
-                     */
-                };
-                
-                $('#demo1').maketimeline();
-                
-                $('#today').click(function(){
-                    tc.setTimeOffset(1 * 365);
-                });
-                
-                $('#zoomin').click(function(){
-                    tc.setZoom(tc.getZoom() * 2);
-                });
-                
-                $('#zoomout').click(function(){
-                    tc.setZoom(tc.getZoom() / 2);
-                });
-                
-            });
-        </script>
-        <style>
-            
-            #dummy {
-                position: relative;
-            }
-            
-            #dummy .block {
-                position: absolute;
-                background-color: #fc8;
-                height: 20px;
-                border-radius: 10px;
-                -moz-border-radius: 10px;
-                -webkit-border-radius: 10px;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-            
-            #dummy .block span {
-                display: block;
-                padding: 6px 10px;
-                font: 10pt Verdana;
-                color: #fff;
-            }
-            
-            .actions {
-                padding: 10px;
-                margin: 0;
-                color: #888;
-            }
-            
-            .actions a {
-                display: inline-block;
-                padding: 5px 10px;
-                background-color: #4ac;
-                font: 10pt Helvetica, Arial;
-                font-weight: bold;
-                color: #fff;
-                border-radius: 10px;
-                -moz-border-radius: 10px;
-                -webkit-border-radius: 10px;
-                cursor: pointer;
-            }
-            
-            .actions a:hover {
-                background-color: #6cf;
-            }
-            
-            h1 {
-                font: 30pt Helvetica, Arial;
-                font-weight: 900;
-                letter-spacing: -2px;
-                padding: 10px;
-                margin: 0;
-            }
-            
-            #demo1 {
-                width: 700px;
-                height: 200px;
-                background-color: #8f8;
-                margin: 0 0 10px 0;
-            }
-            
-            #demo2 {
-                width: 700px;
-                height: 200px;
-                background-color: #f8f;
-                margin: 0 0 10px 0;
-            }
-            
-            #innerdemo {
-                background-color: #fff;
-                height: 100px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>korva_ender /// timeline example</h1>
-        <p class="actions">
-            <a id="today">TODAY</a>
-            <a id="zoomin">ZOOM IN</a>
-            <a id="zoomout">ZOOM OUT</a>
-        </p>
-        <div id="demo1">
-        </div>
-        <div id="dummy">
-        </div>
-    </body>
+	<head>
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="observable.js"></script>
+		<script type="text/javascript" src="eventpacker.js"></script>
+		<script type="text/javascript" src="timeline.js"></script>
+		<script type="text/javascript" src="fingeridhelper.js"></script>
+		<script type="text/javascript" src="timelineinput.js"></script>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		<meta name = "viewport" content = "width=640; initial-scale=1.0; maximum-scale=1.0; user-scalable=0; user-scalable=no" />
+		<script type="text/javascript">
+			$(document).ready( function() {
+
+				var inner1 = $('<div>');
+				inner1.className = 'innerdemo';
+				$('#demo1').empty().append(inner1);
+
+				regeneratepoints = function() {
+					var el1 = $('<div>');
+					for (var k = 0; k < 50; k++) {
+						var x = tc.getPositionFromTime(k * 30);
+						var el2 = $('<div>');
+						el2.css({
+							position: 'absolute',
+							left: x + 'px'
+						});
+						el2.text(k.toString());
+						el1.append(el2);
+					}
+					inner1.empty().append(el1);
+				}
+				positionpoints = function() {
+					var x = tc.getPositionFromTime(0);
+					// console.log(x);
+					inner1.css({
+						position: 'absolute',
+						left: x + 'px'
+					});
+				}
+				var tc = new TimelineController();
+
+				tc.addListener( function(e) {
+					positionpoints();
+					if (e.zoomed)
+						regeneratepoints();
+				});
+				tc.setWidth(640);
+				tc.setTimeSpan(100);
+				tc.setTimeOffset(0);
+
+				positionpoints();
+				regeneratepoints();
+
+				$.fn.maketimeline = function() {
+					var obj = this;
+					var tic = new TimelineInputController(obj, tc);
+				};
+				$('#demo1').maketimeline();
+
+				$('#today').click( function() {
+					tc.setTimeOffset(1 * 365);
+				});
+				$('#zoomin').click( function() {
+					tc.setZoom(tc.getZoom() * 2);
+				});
+				$('#zoomout').click( function() {
+					tc.setZoom(tc.getZoom() / 2);
+				});
+				$(document.body).bind("touchmove", function(e) {
+					e.preventDefault();
+				});
+			});
+		</script>
+		<style>
+			html {
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+				width: 640px;
+			}
+			body {
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+				width: 640px;
+			}
+			#dummy {
+				position: relative;
+			}
+			#dummy .block {
+				position: absolute;
+				background-color: #fc8;
+				height: 20px;
+				border-radius: 10px;
+				-moz-border-radius: 10px;
+				-webkit-border-radius: 10px;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			#dummy .block span {
+				display: block;
+				padding: 6px 10px;
+				font: 10pt Verdana;
+				color: #fff;
+			}
+			.actions {
+				padding: 10px;
+				margin: 0;
+				color: #888;
+			}
+			.actions a {
+				display: inline-block;
+				padding: 5px 10px;
+				background-color: #4ac;
+				font: 10pt Helvetica, Arial;
+				font-weight: bold;
+				color: #fff;
+				border-radius: 10px;
+				-moz-border-radius: 10px;
+				-webkit-border-radius: 10px;
+				cursor: pointer;
+			}
+			.actions a:hover {
+				background-color: #6cf;
+			}
+			h1 {
+				font: 30pt Helvetica, Arial;
+				font-weight: 900;
+				letter-spacing: -2px;
+				padding: 10px;
+				margin: 0;
+			}
+			#demo1 {
+				width: 640px;
+				height: 600px;
+				background-color: #8f8;
+				margin: 0 0 10px 0;
+			}
+			#demo2 {
+				width: 640px;
+				height: 600px;
+				background-color: #f8f;
+				margin: 0 0 10px 0;
+			}
+			#innerdemo {
+				background-color: #fff;
+				height: 100px;
+			}
+		</style>
+	</head>
+	<body scroll="no">
+		<h1>korva_ender /// timeline example</h1>
+		<p class="actions">
+			<a id="today">TODAY</a>
+			<a id="zoomin">ZOOM IN</a>
+			<a id="zoomout">ZOOM OUT</a>
+		</p>
+		<div id="demo1">
+		</div>
+		<div id="dummy">
+		</div>
+	</body>
 </html>
