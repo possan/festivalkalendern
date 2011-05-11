@@ -1,7 +1,8 @@
 <html>
 	<head>
-		<script src="jquery.js"></script>
+		<title>tests</title>
 		<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="jquery.js"></script>
 		<script type="text/javascript" src="qunit.js"></script>
 		<script type="text/javascript" src="eventdb.js"></script>
 		<script type="text/javascript" src="observable.js"></script>
@@ -14,14 +15,14 @@
 		<script type="text/javascript" src="timeline-tests.js"></script>
 		<script type="text/javascript" src="timelineinput-tests.js"></script>
 		<script type="text/javascript" src="helpers-tests.js"></script>
-		<script>
+		<script type="text/javascript">
 			$(document).ready( function() {
-				// ObservableTests();
-				// TimelineTests();
+				ObservableTests();
+				TimelineTests();
 				PanZoomHelperTests();
-				// TimelineInputTests();
-				// FingerIdHelperTests();
-				// EventPackerTests();
+				TimelineInputTests();
+				FingerIdHelperTests();
+				EventPackerTests();
 			});
 		</script>
 	</head>

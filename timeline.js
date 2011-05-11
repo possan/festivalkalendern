@@ -1,8 +1,6 @@
 TimelineController = function() {
 
 	var _obs = new Observable();
-	var _zoom = 1.0;
-	var _scale = 1.0;
 	var _timeoffset = 0.0;
 	var _width = 100;
 	var _timespan = 200;
@@ -19,7 +17,7 @@ TimelineController = function() {
 			_width = w;
 			_obs.fire({
 				zoomed : true,
-				panning : false
+				panning : true
 			});
 		},
 		getWidth : function() {
@@ -49,41 +47,40 @@ TimelineController = function() {
 		getTimeOffset : function() {
 			return _timeoffset;
 		},
-		setZoom : function(z) {
-			if (z == _zoom)
-				return;
-			_zoom = z;
+		setTimeCenter : function(t,r) {
+
+			var s = r * 2;
+			var o = t - r;
+			var sc = (s != _timespan);
+			var oc = (o != _timeoffset);
+			_timeoffset = t - r;
+			_timespan = r*2;
 			_obs.fire({
-				zoomed : true,
-				panning : false
+				zoomed : sc,
+				panning : oc
 			});
 		},
-		getZoom : function() {
-			return _zoom;
-		},
-		setPanOffset : function(p) {
-			if (p == _panoffset)
-				return;
-			_panoffset = p;
+		setTimeRange : function(t1,t2) {
+			var s = t2-t1;
+			var o = t1;
+			var sc = (s != _timespan);
+			var oc = (o != _timeoffset);
+			_timeoffset = t1;
+			_timespan = t2-t1;
 			_obs.fire({
-				zoomed : false,
-				panning : true
+				zoomed : sc,
+				panning : oc
 			});
 		},
-		getPanOffset : function() {
-			return _panoffset;
+		getDisplayOffset: function() {
+			return -ret.getPositionFromTime(0);
 		},
 		getTimeFromPosition : function(p) {
-			_scale = _width / _timespan;
-			return _timeoffset + ((p - _panoffset) / _scale);
+			return _timeoffset + (p / _width) * _timespan;
 		},
 		getPositionFromTime : function(t) {
-			_scale = _width / _timespan;
-			return ((t - _timeoffset) * _scale) + _panoffset;
+			return  (t-_timeoffset) * _width / _timespan;
 		}
 	};
-
-	// ret.initialize(el);
-
 	return ret;
 };

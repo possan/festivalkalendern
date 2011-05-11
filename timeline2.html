@@ -14,11 +14,17 @@
 		<script type="text/javascript">
 			$(document).ready( function() {
 
+				var inner2 = $('<div>');
+				inner2.addClass( 'events');
+
 				var inner1 = $('<div>');
-				inner1.className = 'innerdemo';
+				inner1.addClass( 'innerdemo');
+
 				$('#demo1').empty().append(inner1);
+				$('#demo1').append(inner2);
 
 				regeneratepoints = function() {
+
 					var el1 = $('<div>');
 					var ppo = tc.getDisplayOffset();
 					// console.log('scale: ppo='+ppo);
@@ -39,12 +45,17 @@
 						top:'50px',
 						width:'400px'
 					}).text('offset '+tc.getTimeOffset()+' span '+tc.getTimeSpan()));
+
 					inner1.empty().append(el1);
 				}
 				positionpoints = function() {
 					var ppo = tc.getDisplayOffset();
 					// console.log('pan: ppo='+ppo);
 					inner1.css({
+						position: 'absolute',
+						left: -ppo + 'px'
+					});
+					inner2.css({
 						position: 'absolute',
 						left: -ppo + 'px'
 					});
@@ -84,6 +95,99 @@
 				 $('#zoomout').click( function() {
 				 tc.setZoom(tc.getZoom() / 2);
 				 });*/
+
+				var allitems = [];
+				var counter = 0;
+
+				var ep = new EventPacker();
+
+				ep.addListener( function(arg) {
+					//console.log(arg);
+					for (var i = 0; i < arg.create.length; i++) {
+						var domid = arg.create[i];
+						var item = ep.getItem(domid);
+						console.log(item);
+						$('#' + domid).css({
+							height: '1px',
+							top: (item.line * 40) + 'px',
+							opacity: 0
+						});
+						$('#' + domid).animate({
+							height: '30px',
+							opacity: 1
+						}, 200, 'easeInOutQuart');
+					}
+
+					for (var i = 0; i < arg.show.length; i++) {
+						var domid = arg.show[i];
+						var item = ep.getItem(domid);
+						$('#' + domid).animate({
+							opacity: 1
+						}, 200, 'easeInOutQuart');
+					}
+
+					for (var i = 0; i < arg.hide.length; i++) {
+						var domid = arg.hide[i];
+						var item = ep.getItem(domid);
+						$('#' + domid).animate({
+							opacity: 0.1
+						}, 200, 'easeInOutQuart');
+					}
+
+					for (var i = 0; i < arg.move.length; i++) {
+						var domid = arg.move[i];
+						var item = ep.getItem(domid);
+						$('#' + domid).animate({
+							top: (item.line * 40) + 'px'
+						}, 400, 'easeOutBounce');
+					}
+				});
+				function addsome() {
+					var newitems = [];
+					var n = 1 + Math.round(Math.random() * 4);
+					for (var i = 0; i < n; i++) {
+						var l = 20 + Math.round(Math.random() * 100) * 10;
+						var w = 20 + Math.round(Math.random() * 50) * 10;
+						var r = l + w;
+						var el = $('<div>');
+						el.addClass( 'block');
+						el.attr('id', 'x' + counter);
+						el.css({
+							left: l + 'px',
+							width: w + 'px',
+							top: '40px'
+						} );
+						el.html( '<span>Some text</span>' );
+						inner2.append(el);
+						newitems.push({
+							id: 'x' + counter,
+							left: l,
+							right: r
+						});
+						counter++;
+					}
+					ep.addItems(newitems);
+
+				}
+
+				$('#addsome').click( function() {
+					addsome();
+				});
+				$('#togglesome').click( function() {
+					ep.filter( function(el) {
+						return (Math.round(Math.random() * 2) == 1);
+					});
+				});
+				$('#showall').click( function() {
+					ep.filter( function(el) {
+						return true;
+					});
+				});
+				addsome();
+				addsome();
+				addsome();
+				addsome();
+
 				$(document.body).bind("touchmove", function(e) {
 					e.preventDefault();
 				});
@@ -94,18 +198,21 @@
 				margin: 0;
 				padding: 0;
 				overflow: hidden;
-				width: 640px;
 			}
 			body {
 				padding: 0;
 				margin: 0;
 				overflow: hidden;
-				width: 640px;
 			}
-			#dummy {
-				position: relative;
+			.events {
+				position: absolute;
+				border: 1px solid #f0f;
+				/*  -webkit-transition: all 0.5s ease-in-out;
+				 -moz-transition: all 0.5s ease-in-out;
+				 -o-transition: all 0.5s ease-in-out;
+				 */
 			}
-			#dummy .block {
+			.events .block {
 				position: absolute;
 				background-color: #fc8;
 				height: 20px;
@@ -114,8 +221,12 @@
 				-webkit-border-radius: 10px;
 				overflow: hidden;
 				white-space: nowrap;
+				/*-webkit-transition: all 0.5s ease-in-out;
+				 -moz-transition: all 0.5s ease-in-out;
+				 -o-transition: all 0.5s ease-in-out;
+				 */
 			}
-			#dummy .block span {
+			.events .block span {
 				display: block;
 				padding: 6px 10px;
 				font: 10pt Verdana;
@@ -149,24 +260,29 @@
 				margin: 0;
 			}
 			#demo1 {
+				position: relative;
 				width: 100%;
-				height: 600px;
+				height: 200px;
 				background-color: #cf8;
 				margin: 0 0 10px 0;
 				overflow: hidden;
 			}
 			#demo2 {
+				position: relative;
 				width: 100%;
 				height: 60px;
 				background-color: #f8f;
 				margin: 0 0 10px 0;
 				overflow: hidden;
 			}
-			#innerdemo {
+			.innerdemo {
 				background-color: #fff;
 				height: 100px;
 				position: absolute;
 				width: 640px;
+				/*    -webkit-transition: all 0.5s ease-in-out;
+				 -moz-transition: all 0.5s ease-in-out;
+				 -o-transition: all 0.5s ease-in-out;*/
 			}
 		</style>
 	</head>
@@ -174,15 +290,16 @@
 		<h1>korva_ender /// timeline example</h1>
 		<p class="actions">
 			<a id="today">TODAY</a>
-			<a id="sum2011">SUMMER 2011</a>
-			<a id="win2011">WINTER 2011</a>
-			<a id="sum2012">SUMMER 2012</a>
+			<a id="sum2011">SUM/2011</a>
+			<a id="win2011">WIN/2011</a>
+			<a id="sum2012">SUM/2012</a>
+			<a id="addsome">ADD SOME</a>
+			<a id="togglesome">H/S RANDOM</a>
+			<a id="showall">SHOW ALL</a>
 		</p>
 		<div id="demo1">
 		</div>
 		<div id="demo2">
-		</div>
-		<div id="dummy">
 		</div>
 	</body>
 </html>

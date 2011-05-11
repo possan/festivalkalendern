@@ -206,8 +206,8 @@ PanZoomHelperTests = function() {
 			z:100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 150 );
+		equals( o.t1, -50 );
+		equals( o.t2, 50 );
 	});
 	test("calcNewTimesFromPanZoom test 3", function() {
 		var i = {
@@ -217,8 +217,8 @@ PanZoomHelperTests = function() {
 			z:100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 100 );
-		equals( o.t2, 200 );
+		equals( o.t1, -100 );
+		equals( o.t2, 0 );
 	});
 	test("calcNewTimesFromPanZoom test 4", function() {
 		var i = {
@@ -228,8 +228,8 @@ PanZoomHelperTests = function() {
 			z:50
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 25 );
-		equals( o.t2, 75 );
+		equals( o.t1, -50 );
+		equals( o.t2, 150 );
 	});
 	test("calcNewTimesFromPanZoom test 5", function() {
 		var i = {
@@ -239,8 +239,8 @@ PanZoomHelperTests = function() {
 			z:200
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, -50 );
-		equals( o.t2, 150 );
+		equals( o.t1, 25 );
+		equals( o.t2, 75 );
 	});
 	test("calcNewTimesFromPanZoom test 6", function() {
 		var i = {
@@ -250,19 +250,19 @@ PanZoomHelperTests = function() {
 			z:100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 0 );
-		equals( o.t2, 50 );
+		equals( o.t1, 100 );
+		equals( o.t2, 150 );
 	});
 	test("calcNewTimesFromPanZoom test 7", function() {
 		var i = {
 			t1:50,
 			t2:100,
 			p:100,
-			z:300
+			z:50
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 200 );
+		equals( o.t1, -25 );
+		equals( o.t2, 75 );
 	});
 	test("calcNewTimes test 1", function() {
 		var i = {
@@ -295,41 +295,58 @@ PanZoomHelperTests = function() {
 			}
 		}
 		var o = h.calcNewTimes(i);
+		equals( o.t1, 50 );
+		equals( o.t2, 250 );
+	});
+	test("calcNewTimes test 3", function() {
+		var i = {
+			t1:100,
+			t2:200,
+			o: {
+				l:0,
+				r:50
+			},
+			n: {
+				l:50,
+				r:100
+			}
+		}
+		var o = h.calcNewTimes(i);
+		equals( o.t1, 50 );
+		equals( o.t2, 150 );
+	});
+	test("calcNewTimes test 4", function() {
+		var i = {
+			t1:100,
+			t2:200,
+			o: {
+				l:50,
+				r:100
+			},
+			n: {
+				l:0,
+				r:50
+			}
+		}
+		var o = h.calcNewTimes(i);
+		equals( o.t1, 150 );
+		equals( o.t2, 250 );
+	});
+	test("calcNewTimes test 5", function() {
+		var i = {
+			t1:100,
+			t2:200,
+			o: {
+				l:25,
+				r:75
+			},
+			n: {
+				l:0,
+				r:100
+			}
+		}
+		var o = h.calcNewTimes(i);
 		equals( o.t1, 125 );
 		equals( o.t2, 175 );
-	});
-	test("calcNewTimes test 3", function() {
-		var i = {
-			t1:100,
-			t2:200,
-			o: {
-				l:50,
-				r:100
-			},
-			n: {
-				l:0,
-				r:50
-			}
-		}
-		var o = h.calcNewTimes(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 150 );
-	});
-	test("calcNewTimes test 3", function() {
-		var i = {
-			t1:100,
-			t2:200,
-			o: {
-				l:50,
-				r:100
-			},
-			n: {
-				l:0,
-				r:50
-			}
-		}
-		var o = h.calcNewTimes(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 150 );
 	});
 };

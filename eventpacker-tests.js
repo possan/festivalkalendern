@@ -6,11 +6,11 @@ EventPackerTests = function() {
 		var ml = new MockObserver();
 		p.addListener(ml.listener);
 		ok(ml.callcount == 0);
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			right : 10
-		}, {
+		},{
 			id : 'b',
 			left : 5,
 			right : 8
@@ -24,17 +24,16 @@ EventPackerTests = function() {
 		ok(ml.lastarg.show.length == 2);
 		ok(ml.lastarg.hide.length == 0);
 	});
-
 	test("filter show and calls callback", function() {
 		var p = new EventPacker();
 		var ml = new MockObserver();
 		p.addListener(ml.listener);
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			hidden : true,
 			right : 10
-		}, {
+		},{
 			id : 'b',
 			left : 5,
 			hidden : true,
@@ -42,7 +41,7 @@ EventPackerTests = function() {
 		} ]);
 		ok(p.getItem('a').hidden == true);
 		ok(p.getItem('b').hidden == true);
-		p.filter(function(item) {
+		p.filter( function(item) {
 			return (item.id == 'a');
 		});
 		ok(ml.callcount == 2, "Call count");
@@ -50,7 +49,7 @@ EventPackerTests = function() {
 		ok(p.getItem('b').hidden == true, 'b is hidden');
 		ok(ml.lastarg.show[0] == 'a', "Call argument");
 		ok(ml.lastarg.show.length == 1, "Call argument");
-		p.filter(function(item) {
+		p.filter( function(item) {
 			return (item.id == 'b');
 		});
 		ok(ml.callcount == 3, "Call count");
@@ -61,20 +60,19 @@ EventPackerTests = function() {
 		ok(ml.lastarg.hide[0] == 'a', "Call argument");
 		ok(ml.lastarg.hide.length == 1, "Call argument");
 	});
-
 	test("can pack events 1", function() {
 		var p = new EventPacker();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			hidden : false,
 			right : 10
-		}, {
+		},{
 			id : 'b',
 			left : 5,
 			hidden : false,
 			right : 8
-		}, {
+		},{
 			id : 'c',
 			left : 5,
 			hidden : false,
@@ -84,22 +82,21 @@ EventPackerTests = function() {
 		ok(p.getItem('b').line == 1);
 		ok(p.getItem('c').line == 0);
 	});
-
 	test("can weight individual items", function() {
 		var p = new EventPacker();
-		var w1 = p._locals._weight( {
+		var w1 = p._locals._weight({
 			left : 2,
 			right : 10
 		});
-		var w2 = p._locals._weight( {
+		var w2 = p._locals._weight({
 			left : 5,
 			right : 8
 		});
-		var w3 = p._locals._weight( {
+		var w3 = p._locals._weight({
 			left : 5,
 			right : 8
 		});
-		var w4 = p._locals._weight( {
+		var w4 = p._locals._weight({
 			left : 6,
 			right : 7
 		});
@@ -108,10 +105,9 @@ EventPackerTests = function() {
 		ok(w1 < w4);
 		ok(w3 < w4);
 	});
-
 	test("can find collision 1", function() {
 		var p = new EventPacker();
-		ok(p._locals._collides( {
+		ok(p._locals._collides({
 			left : 1,
 			right : 2
 		}, {
@@ -119,10 +115,9 @@ EventPackerTests = function() {
 			right : 4
 		}) == false);
 	});
-
 	test("can find collision 2", function() {
 		var p = new EventPacker();
-		ok(p._locals._collides( {
+		ok(p._locals._collides({
 			left : 0,
 			right : 2
 		}, {
@@ -130,10 +125,9 @@ EventPackerTests = function() {
 			right : 3
 		}) == true);
 	});
-
 	test("can find collision 3", function() {
 		var p = new EventPacker();
-		ok(p._locals._collides( {
+		ok(p._locals._collides({
 			left : 1,
 			right : 3
 		}, {
@@ -141,10 +135,9 @@ EventPackerTests = function() {
 			right : 2
 		}) == true);
 	});
-
 	test("can find collision 4", function() {
 		var p = new EventPacker();
-		ok(p._locals._collides( {
+		ok(p._locals._collides({
 			left : 0,
 			right : 5
 		}, {
@@ -152,10 +145,9 @@ EventPackerTests = function() {
 			right : 3
 		}) == true);
 	});
-
 	test("can find collision 5", function() {
 		var p = new EventPacker();
-		ok(p._locals._collides( {
+		ok(p._locals._collides({
 			left : 1,
 			right : 3
 		}, {
@@ -163,19 +155,18 @@ EventPackerTests = function() {
 			right : 4
 		}) == true);
 	});
-
 	test("can sort based on weight", function() {
 		var p = new EventPacker();
 		var ml = new MockObserver();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			right : 10
-		}, {
+		},{
 			id : 'b',
 			left : 5,
 			right : 8
-		}, {
+		},{
 			id : 'c',
 			left : 5,
 			right : 10
@@ -186,15 +177,14 @@ EventPackerTests = function() {
 		ok(o[2], 'b');
 		ok(o.length, 3);
 	});
-
 	test("can sort events 1", function() {
 		var p = new EventPacker();
 		var ml = new MockObserver();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'c',
 			left : 5,
 			right : 10
-		}, {
+		},{
 			id : 'd',
 			left : 0,
 			right : 15
@@ -202,23 +192,22 @@ EventPackerTests = function() {
 		ok(p.getItem('c').line == 1);
 		ok(p.getItem('d').line == 0);
 	});
-
 	test("can sort events 2", function() {
 		var p = new EventPacker();
 		var ml = new MockObserver();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			right : 10
-		}, {
+		},{
 			id : 'b',
 			left : 5,
 			right : 8
-		}, {
+		},{
 			id : 'c',
 			left : 5,
 			right : 10
-		}, {
+		},{
 			id : 'd',
 			left : 0,
 			right : 15
@@ -228,25 +217,24 @@ EventPackerTests = function() {
 		ok(p.getItem('b').line == 2);
 		ok(p.getItem('a').line == 3);
 	});
-
 	test("fires on change", function() {
 		var p = new EventPacker();
 		var ml = new MockObserver();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			right : 10
-		}, {
+		},{
 			id : 'b',
 			left : 5,
 			right : 8
-		}, {
+		},{
 			id : 'c',
 			left : 5,
 			right : 10
 		} ]);
 		p.addListener(ml.listener);
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'd',
 			left : 1,
 			right : 15
@@ -264,10 +252,9 @@ EventPackerTests = function() {
 		ok(ml.lastarg.move[1] == 'b');
 		ok(ml.lastarg.move[2] == 'c');
 	});
-
 	test("can hide item", function() {
 		var p = new EventPacker();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			right : 10
@@ -278,10 +265,9 @@ EventPackerTests = function() {
 		p.hideItem('a');
 		ok(p.getItem('a').hidden == true);
 	});
-
 	test("can show item", function() {
 		var p = new EventPacker();
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'a',
 			left : 7,
 			hidden : true,
@@ -293,35 +279,38 @@ EventPackerTests = function() {
 		p.showItem('a');
 		ok(p.getItem('a').hidden == false);
 	});
-
 	test("fires hide event on hide", function() {
 		var p = new EventPacker();
 		var ml = new MockObserver();
 		p.addListener(ml.listener);
-		p.addItems( [ {
+		p.addItems( [{
 			id : 'b',
-			left : 5,
-			right : 8
-		}, {
+			left : 4,
+			right : 12
+		},{
 			id : 'c',
 			left : 6,
 			right : 10
 		} ]);
+		console.log(ml.lastarg);
 		equals(ml.callcount, 1, "call counter");
 		equals(ml.lastarg.create[0], 'b', "create item 1");
 		equals(ml.lastarg.create[1], 'c', "create item 2");
 		equals(ml.lastarg.create.length, 2, "create item count");
+		equals(ml.lastarg.move.length, 2, "create item count");
+		equals(ml.lastarg.show.length, 2, "create item count");
 		p.hideItem('b');
+		console.log(ml.lastarg);
 		equals(ml.callcount, 2, "call counter");
 		equals(ml.lastarg.hide[0], 'b', "hide item 1");
 		equals(ml.lastarg.hide.length, 1, "hide item count");
 		p.hideItem('c');
+		console.log(ml.lastarg);
 		equals(ml.callcount, 3, "call counter");
 		equals(ml.lastarg.hide[0], 'c', "hide item 1");
 		equals(ml.lastarg.hide.length, 1, "hide item count");
 		p.hideItem('b');
-		equals(ml.callcount, 4, "call counter");
-		equals(ml.lastarg.hide.length, 0, "hide item count");
+		console.log(ml.lastarg);
+		equals(ml.callcount, 3, "call counter");
 	});
-
 }

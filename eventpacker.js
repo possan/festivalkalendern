@@ -163,6 +163,7 @@ EventPacker = function() {
 			if (!evt.hidden)
 				return;
 			evt.hidden = false;
+			evt._show = true;
 			locals._checkChanges();
 		},
 		hideItem : function(id) {
@@ -170,6 +171,7 @@ EventPacker = function() {
 			if (evt.hidden)
 				return;
 			evt.hidden = true;
+			evt._hide = true;
 			locals._checkChanges();
 		},
 		addListener : function(cb) {
