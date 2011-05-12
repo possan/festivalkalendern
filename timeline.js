@@ -47,6 +47,9 @@ TimelineController = function() {
 		getTimeOffset : function() {
 			return _timeoffset;
 		},
+		getTimeCenter : function() {
+			return _timeoffset + _timespan/2;
+		},
 		setTimeCenter : function(t,r) {
 
 			var s = r * 2;

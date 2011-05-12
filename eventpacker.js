@@ -43,12 +43,12 @@ EventPacker = function() {
 			$.each(locals.events, function() {
 				if (this.hidden)
 					return;
-				data.push( {
+				data.push({
 					k : this.id,
 					w : locals._weight(this)
 				});
 			});
-			data.sort(function(a, b) {
+			data.sort( function(a, b) {
 				return a.w - b.w;
 			});
 			return data;
@@ -57,37 +57,35 @@ EventPacker = function() {
 			var ord = locals._sortorder();
 			var placed = [];
 			$.each(
-					ord,
-					function() {
-						var id = this.k;
-						var item = locals._getItem(id);
-						item.oldline = item.line;
-						// item.line = -1;
-						var lowest = -1;
-						for ( var line = 0; line < locals.MAXLINES
-								&& lowest == -1; line++) {
-							var anycollisions = false;
-							$.each(placed,
-									function() {
-										var pid = this.k;
-										var p = locals._getItem(pid);
-										if (p.line == line
-												&& locals._collides(p, item)) {
-											anycollisions = true;
-										}
-									});
-							if (!anycollisions) {
-								lowest = line;
-							}
+			ord, function() {
+				var id = this.k;
+				var item = locals._getItem(id);
+				item.oldline = item.line;
+				// item.line = -1;
+				var lowest = -1;
+				for ( var line = 0; line < locals.MAXLINES
+				&& lowest == -1; line++) {
+					var anycollisions = false;
+					$.each(placed, function() {
+						var pid = this.k;
+						var p = locals._getItem(pid);
+						if (p.line == line
+						&& locals._collides(p, item)) {
+							anycollisions = true;
 						}
-						if (lowest == -1)
-							return;
-						placed.push( {
-							k : id
-						});
-						item.line = lowest;
-						item._move = (item.line != item.oldline);
 					});
+					if (!anycollisions) {
+						lowest = line;
+					}
+				}
+				if (lowest == -1)
+					return;
+				placed.push({
+					k : id
+				});
+				item.line = lowest;
+				item._move = (item.line != item.oldline);
+			});
 		},
 		_checkChanges : function() {
 			locals._pack();
@@ -107,10 +105,9 @@ EventPacker = function() {
 				if (this._move)
 					movelist.push(this.id);
 			});
-
 			if (movelist.length > 0 || showlist.length > 0
-					|| hidelist.length > 0 || createlist.length > 0) {
-				obs.fire( {
+			|| hidelist.length > 0 || createlist.length > 0) {
+				obs.fire({
 					create : createlist,
 					show : showlist,
 					hide : hidelist,
@@ -142,6 +139,15 @@ EventPacker = function() {
 
 		_locals : locals,
 
+		countItems: function() {
+			return locals.events.length;
+		},
+		getItemByIndex : function(idx) {
+			return locals.events[idx];
+		},
+		getId : function(idx) {
+			return locals.events[idx].id;
+		},
 		addItem : function(item) {
 			locals._addItem(item);
 			locals._checkChanges();
