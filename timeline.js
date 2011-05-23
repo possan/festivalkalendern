@@ -5,6 +5,7 @@ TimelineController = function() {
 	var _width = 100;
 	var _timespan = 200;
 	var _panoffset = 0;
+	var _lineoffset = 0;
 
 	var ret = {
 
@@ -49,6 +50,16 @@ TimelineController = function() {
 		},
 		getTimeCenter : function() {
 			return _timeoffset + _timespan/2;
+		},
+		getLineOffset : function(){
+			return _lineoffset;
+		},
+		setLineOffset: function(lo){
+			_lineoffset = lo;
+			_obs.fire({
+				zoomed : false,
+				panning : true
+			});
 		},
 		setTimeCenter : function(t,r) {
 

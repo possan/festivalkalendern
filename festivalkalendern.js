@@ -1,13 +1,13 @@
-$(document).ready( function() {
+$(document).ready(function() {
 
 	var outerel = $('#timeline');
-	var timelineel = $('.innertimeline',outerel);
-	var eventsel = $('.events',outerel);
-	var cursorel = $('.cursor',outerel);
-	var todayel = $('.today',outerel);
+	var timelineel = $('.innertimeline', outerel);
+	var eventsel = $('.events', outerel);
+	var cursorel = $('.cursor', outerel);
+	var todayel = $('.today', outerel);
 
 	var today_time = 50;
-	var cursor_time = today_time+10;
+	var cursor_time = today_time + 10;
 
 	var tc = new TimelineController();
 	var tic = new TimelineInputController(outerel, tc);
@@ -15,171 +15,190 @@ $(document).ready( function() {
 
 	updatecursorlabel = function() {
 		var cc = tc.getTimeCenter();
-		$('.label',cursorel).text("MÅ, 3 FEB "+cc);
+		$('.label', cursorel).html("M&Aring;, 3 FEB " + cc);
 	}
 	regeneratepoints = function() {
 
 		var el1 = $('<div>');
 		var ppo = tc.getDisplayOffset();
 		// console.log('scale: ppo='+ppo);
-		for (var k = 0; k < 50; k++) {
+		for ( var k = 0; k < 50; k++) {
 			var d = k * 10;
 			var x = tc.getPositionFromTime(d) - ppo;
 			var el2 = $('<div>');
-			el2.addClass('week');
-			el2.text(d.toString());
-			el2.css({
-				position: 'absolute',
-				left: x + 'px'
+			el2.addClass('bottommarker');
+			el2.addClass('month');
+			el2.css( {
+				position : 'absolute',
+				left : x + 'px'
 			});
+			var el3 = $('<div>');
+			el3.addClass('label');
+			el3.text(d.toString());
+			el2.append(el3);
+			el3 = $('<div>');
+			el3.addClass('line');
+			el2.append(el3);
 			el1.append(el2);
 		}
 
-		for (var k = 0; k < 20; k++) {
+		for ( var k = 0; k < 20; k++) {
 			var d = k * 14;
 			var x = tc.getPositionFromTime(d) - ppo;
 			var el2 = $('<div>');
-			el2.addClass('month');
-			el2.text(d.toString());
-			el2.css({
-				position: 'absolute',
-				left: x + 'px'
+			el2.addClass('bottommarker');
+			el2.addClass('week');
+			el2.css( {
+				position : 'absolute',
+				left : x + 'px'
 			});
+			var el3 = $('<div>');
+			el3.addClass('label');
+			el3.text(d.toString());
+			el2.append(el3);
+			el3 = $('<div>');
+			el3.addClass('line');
+			el2.append(el3);
 			el1.append(el2);
 		}
-
-		el1.append($('<div>').css({
-			position:'absolute',
-			left:'10px',
-			top:'50px',
-			width:'400px'
-		}).text('offset '+tc.getTimeOffset()+' span '+tc.getTimeSpan()));
 
 		timelineel.empty().append(el1);
 		el1.addClass('innertimeline');
 
-		// ändra left + width på alla blocken också...
-		for( var k=0; k<ep.countItems(); k++ ) {
+		// �ndra left + width på alla blocken också...
+		for ( var k = 0; k < ep.countItems(); k++) {
 			var item = ep.getItemByIndex(k);
-			console.log(item);
-			if( item == null )
+			// console.log(item);
+			if (item == null)
 				continue;
-			var el = $('#'+item.id);
-			var lp = Math.round(tc.getPositionFromTime( item.left ));
-			var rp = Math.round(tc.getPositionFromTime( item.right ));
+			var el = $('#' + item.id);
+			var lp = Math.round(tc.getPositionFromTime(item.left));
+			var rp = Math.round(tc.getPositionFromTime(item.right));
 			var wp = rp - lp;
-			el.css({
-				left: lp + 'px',
-				width: wp + 'px'
-			} );
+			el.css( {
+				left : lp + 'px',
+				width : wp + 'px'
+			});
 		}
 	}
 	positionpoints = function() {
-		//if( Modernizr.touch ){
+		// if( Modernizr.touch ){
 		var cc = tc.getTimeCenter();
 		cursor_time = cc;
-		//}
+		// }
 		var ppo = Math.round(tc.getDisplayOffset());
+		var yo = 40 - Math.round(tc.getLineOffset());
 		// console.log('pan: ppo='+ppo);
-		timelineel.css({
-			position: 'absolute',
-			left: -ppo + 'px'
+		timelineel.css( {
+			position : 'absolute',
+			left : -ppo + 'px'
 		});
-		eventsel.css({
-			position: 'absolute',
-			left: -ppo + 'px'
+		eventsel.css( {
+			position : 'absolute',
+			left : -ppo + 'px',
+			top : yo + 'px'
 		});
 		var x = Math.round(tc.getPositionFromTime(today_time));
-		todayel.css({
-			position: 'absolute',
-			left: x + 'px'
+		todayel.css( {
+			position : 'absolute',
+			left : x + 'px'
 		});
-		x =Math.round( tc.getPositionFromTime(cursor_time));
-		cursorel.css({
-			position: 'absolute',
-			left: x + 'px'
+		x = Math.round(tc.getPositionFromTime(cursor_time));
+		cursorel.css( {
+			position : 'absolute',
+			left : x + 'px'
 		});
 		updatecursorlabel();
 	}
-	tc.addListener( function(e) {
+	tc.addListener(function(e) {
 		positionpoints();
 		if (e.zoomed)
 			regeneratepoints();
 	});
-	ep.addListener( function(arg) {
-		//console.log(arg);
-		for (var i = 0; i < arg.create.length; i++) {
+	ep.addListener(function(arg) {
+		for ( var i = 0; i < arg.create.length; i++) {
 			var domid = arg.create[i];
 			var item = ep.getItem(domid);
-			// console.log(item);
-			$('#' + domid).css({
-				height: '1px',
-				top: (item.line * 40) + 'px',
-				opacity: 0
+			$('#' + domid).css( {
+				height : '1px',
+				top : (item.line * 40) + 'px',
+				opacity : 0
 			});
-			$('#' + domid).animate({
-				height: '30px',
-				opacity: 1
+			$('#' + domid).animate( {
+				height : '30px',
+				opacity : 1
 			}, 200, 'easeInOutQuart');
 		}
 
-		for (var i = 0; i < arg.show.length; i++) {
+		for ( var i = 0; i < arg.show.length; i++) {
 			var domid = arg.show[i];
 			var item = ep.getItem(domid);
-			$('#' + domid).animate({
-				opacity: 1
+			$('#' + domid).animate( {
+				opacity : 1
 			}, 200, 'easeInOutQuart');
 		}
 
-		for (var i = 0; i < arg.hide.length; i++) {
+		for ( var i = 0; i < arg.hide.length; i++) {
 			var domid = arg.hide[i];
 			var item = ep.getItem(domid);
-			$('#' + domid).animate({
-				opacity: 0
+			$('#' + domid).animate( {
+				opacity : 0
 			}, 200, 'easeInOutQuart');
 		}
 
-		for (var i = 0; i < arg.move.length; i++) {
+		for ( var i = 0; i < arg.move.length; i++) {
 			var domid = arg.move[i];
 			var item = ep.getItem(domid);
-			$('#' + domid).animate({
-				top: (item.line * 40) + 'px'
+			$('#' + domid).animate( {
+				top : (item.line * 40) + 'px'
 			}, 400, 'easeOutBounce');
 		}
 	});
-	function clickevent(e) {
-		var el = $(e.target).parent('div.block');
-		var id = el.attr('id');
-		console.log("click target",id);
+
+	function showdetails(id) {
+		alert("show details for " + id);
 	}
+
+	var dragging = false;
+	var dragtimer = -1;
 
 	function addsome() {
 		var newitems = [];
 		var n = 1 + Math.round(Math.random() * 4);
-		for (var i = 0; i < n; i++) {
+		for ( var i = 0; i < n; i++) {
 			var lt = 2 + Math.round(Math.random() * 40) * 4;
 			var wt = 3 + Math.round(Math.random() * 40) * 4;
 			var rt = lt + wt;
-			var lp = Math.round(tc.getPositionFromTime( lt ));
-			var rp = Math.round( tc.getPositionFromTime( rt ));
+			var lp = Math.round(tc.getPositionFromTime(lt));
+			var rp = Math.round(tc.getPositionFromTime(rt));
 			var wp = rp - lp;
 			var el = $('<div>');
-			el.addClass( 'block');
+			el.addClass('block');
 			var id = 'x' + counter;
 			el.attr('id', id);
-			el.css({
-				left: lp + 'px',
-				width: wp + 'px',
-				top: '40px'
-			} );
-			el.html( '<span>Some text</span>' );
-			el.click(clickevent);
+			el.css( {
+				left : lp + 'px',
+				width : wp + 'px',
+				top : '40px'
+			});
+			el.html('<div>#' + id + '</div>');
+			if (Modernizr.touch) {
+				el.bind("touchend", function() {
+					if (!dragging)
+						showdetails(id);
+				});
+			} else {
+				el.bind('mouseup', function() {
+					if (!dragging)
+						showdetails(id);
+				});
+			}
 			eventsel.append(el);
-			newitems.push({
-				id: id,
-				left: lt,
-				right: rt,
-				customdata: counter
+			newitems.push( {
+				id : id,
+				left : lt,
+				right : rt,
+				customdata : counter
 			});
 			counter++;
 		}
@@ -195,70 +214,105 @@ $(document).ready( function() {
 	addsome();
 	addsome();
 
-	//tc.setTimeSpan(100);
-	//tc.setTimeOffset(0);
 	tc.setTimeCenter(50, 50);
 
 	positionpoints();
 	regeneratepoints();
 
-	$('#today').click( function() {
+	$('#today').click(function() {
 		tic.animateTo(1 * 40);
 	});
-	$('#sum2011').click( function() {
+	$('#sum2011').click(function() {
 		tic.animateTo(1 * 10);
 	});
-	$('#win2011').click( function() {
+	$('#win2011').click(function() {
 		tic.animateTo(1 * 30);
 	});
-	$('#sum2012').click( function() {
+	$('#sum2012').click(function() {
 		tic.animateTo(1 * 50);
 	});
-	/*
-	 $('#zoomin').click( function() {
-	 tc.setZoom(tc.getZoom() * 2);
-	 });
-	 $('#zoomout').click( function() {
-	 tc.setZoom(tc.getZoom() / 2);
-	 });*/
 
-	$(outerel).bind("mousemove", function(e) {
-		// if( Modernizr.touch )
-		// return;
-		// cursor_time = tc.getTimeFromPosition(e.pageX);
-		// positionpoints();
+	$(outerel).bind("mousedown", function(e) {
+		dragging = false;
 	});
-	$('#addsome').click( function() {
+	$(outerel).bind("mousemove", function(e) {
+		dragging = true;
+	});
+	if (Modernizr.touch) {
+		$(outerel).bind("touchstart", function(e) {
+			dragging = false;
+		});
+		$(outerel).bind("touchmove", function(e) {
+			dragging = true;
+		});
+	}
+	$('#addsome').click(function() {
 		addsome();
 	});
-	$('#togglesome').click( function() {
-		ep.filter( function(el) {
+	$('#togglesome').click(function() {
+		ep.filter(function(el) {
 			return (Math.round(Math.random() * 2) == 1);
 		});
 	});
-	$('#showall').click( function() {
-		ep.filter( function(el) {
+	$('#showall').click(function() {
+		ep.filter(function(el) {
 			return true;
 		});
 	});
-	$('#toggletagwindow').click( function() {
-		if(
-		$('.tagwindow').css('top') == '0px' )
-			$('.tagwindow').css({
-				top:'-250px'
-			});
+
+	_lastdropdown = '';
+	setDropdown = function(sel) {
+		if (_lastdropdown != sel)
+			_lastdropdown = sel;
 		else
-			$('.tagwindow').css({
-				top:'0px'
+			_lastdropdown = '';
+		$('div.dropdown').each(function() {
+			var down = ($(this).attr('id') == _lastdropdown);
+			// console.log(this, down);
+				$(this).css( {
+					display : 'block',
+					top : down ? '0px' : '-' + $(this).height() + 'px'
+				});
 			});
+		if (_lastdropdown != '')
+			$('div#dimmer').css( {
+				opacity : 0.6,
+				display : 'block'
+			});
+		else {
+			$('div#dimmer').css( {
+				opacity : 0.0,
+				display : 'none'
+			});
+		}
+	}
+	$('div#dimmer').click(function(e) {
+		setDropdown('');
 	});
-	$(document.body).bind("touchmove", function(e) {
+	$('div.dropdown').click(function(e) {
 		e.preventDefault();
 	});
+	setTimeout(function() {
+		setDropdown('');
+	}, 1000);
+	$('#aboutbutton').click(function() {
+		setDropdown('aboutdropdown');
+	});
+	$('#favouritebutton').click(function() {
+		setDropdown('favouritesdropdown');
+	});
+	$('#tagbutton').click(function() {
+		setDropdown('tagsdropdown');
+	});
+	if (Modernizr.touch) {
+		$(document.body).bind("touchmove", function(e) {
+			e.preventDefault();
+		});
+	}
 	$(document.body).bind("mousedown", function(e) {
 		e.preventDefault();
 	});
-	$(window).resize( function(e) {
+	$(window).resize(function(e) {
 		tc.setWidth(outerel.width());
 	});
 });

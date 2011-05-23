@@ -22,6 +22,9 @@ TimelineInputController = function(element, timeline) {
 	p.draw_down_p = 0;
 	p.draw_down_s = 0;
 
+	p.drag_down_y = 0;
+	p.drag_down_lo = 0;
+
 	p.zoom_down_lp = 0;
 	p.zoom_down_rp = 0;
 	p.zoom_down_t1 = 0;
@@ -73,7 +76,8 @@ TimelineInputController = function(element, timeline) {
 			var o = h.calcPan(i);
 
 			p._tc.setTimeOffset( p.drag_down_o - (p.drag_down_s * o / 100) );
-
+			p._tc.setLineOffset( p.drag_down_lo - (p._points[0].y - p.drag_down_y) );
+ 
 		} else if (p._mode == MODE_ZOOMING) {
 
 			var n1x = p._points[0].x * 100 / p.width;
@@ -130,6 +134,9 @@ TimelineInputController = function(element, timeline) {
 
 			//	console.log('begin dragging (0p -> 1p)');
 
+			p.drag_down_y = p._points[0].y;
+			p.drag_down_lo = p._tc.getLineOffset();
+			
 			p.drag_down_o = p._tc.getTimeOffset();
 			p.drag_down_p = p._points[0].x * 100 / p.width;
 			p.drag_down_s = p._tc.getTimeSpan();
