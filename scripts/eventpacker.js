@@ -3,12 +3,17 @@ EventPacker = function() {
 	var locals = {
 		MAXLINES : 30,
 		events : [],
+		
+		
 		_getItem : function(id) {
 			for ( var k = 0; k < locals.events.length; k++)
 				if (locals.events[k].id == id)
 					return locals.events[k];
 			return null;
 		},
+		
+		
+		
 		_fireChange : function(arg) {
 			obs.call(arg);
 		},
@@ -32,9 +37,9 @@ EventPacker = function() {
 			return s - l / 2;
 		},
 		_collides : function(a, b) {
-			if (a.right < b.left)
+			if (a.right <= b.left)
 				return false;
-			if (a.left > b.right)
+			if (a.left >= b.right)
 				return false;
 			return true;
 		},

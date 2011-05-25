@@ -77,16 +77,16 @@ PanZoomHelperTests = function() {
 	module("PanZoomHelper tests");
 	test("calcSpan test 1", function() {
 		var i = {
-			l:40,
-			r:100
+			l : 40,
+			r : 100
 		};
 		var o = h.calcSpan(i);
 		equals(o, 60);
 	});
 	test("calcSpan test 2", function() {
 		var i = {
-			l:100,
-			r:60
+			l : 100,
+			r : 60
 		};
 		var o = h.calcSpan(i);
 		equals(o, 40);
@@ -107,13 +107,13 @@ PanZoomHelperTests = function() {
 	});
 	test("calcZoom test 1", function() {
 		var i = {
-			o: {
-				l:25,
-				r:75
+			o : {
+				l : 25,
+				r : 75
 			},
-			n: {
-				l:0,
-				r:100
+			n : {
+				l : 0,
+				r : 100
 			}
 		};
 		var o = h.calcZoom(i);
@@ -121,13 +121,13 @@ PanZoomHelperTests = function() {
 	});
 	test("calcZoom test 2", function() {
 		var i = {
-			o: {
-				l:50,
-				r:100
+			o : {
+				l : 50,
+				r : 100
 			},
-			n: {
-				l:0,
-				r:50
+			n : {
+				l : 0,
+				r : 50
 			}
 		};
 		var o = h.calcZoom(i);
@@ -135,13 +135,13 @@ PanZoomHelperTests = function() {
 	});
 	test("calcZoom test 3", function() {
 		var i = {
-			o: {
-				l:50,
-				r:100
+			o : {
+				l : 50,
+				r : 100
 			},
-			n: {
-				l:20,
-				r:25
+			n : {
+				l : 20,
+				r : 25
 			}
 		};
 		var o = h.calcZoom(i);
@@ -149,204 +149,268 @@ PanZoomHelperTests = function() {
 	});
 	test("calcPan test 1", function() {
 		var i = {
-			o: {
-				l:0,
-				r:10
+			o : {
+				l : 0,
+				r : 10
 			},
-			n: {
-				l:90,
-				r:100
+			n : {
+				l : 90,
+				r : 100
 			}
 		};
 		var o = h.calcPan(i);
 		equals(o, 90);
 	});
-	test("calcPan test 2", function() { 
+	test("calcPan test 2", function() {
 		var i = {
-			o: {
-				l:50,
-				r:100
+			o : {
+				l : 50,
+				r : 100
 			},
-			n: {
-				l:0,
-				r:50
+			n : {
+				l : 0,
+				r : 50
 			}
 		};
 		var o = h.calcPan(i);
 		equals(o, -50);
 	});
 	test("calcTimeInRange test 1", function() {
-		var o = h.calcTimeInRange(0,30,40);
-		equals(o,30);
+		var o = h.calcTimeInRange(0, 30, 40);
+		equals(o, 30);
 	});
 	test("calcTimeInRange test 2", function() {
-		var o = h.calcTimeInRange(50,60,140);
-		equals(o,100);
+		var o = h.calcTimeInRange(50, 60, 140);
+		equals(o, 100);
 	});
 	test("calcTimeInRange test 3", function() {
-		var o = h.calcTimeInRange(110,55,90);
-		equals(o,90);
+		var o = h.calcTimeInRange(110, 55, 90);
+		equals(o, 90);
 	});
 	test("calcNewTimesFromPanZoom test 1", function() {
 		var i = {
-			t1:0,
-			t2:100,
-			p:0,
-			z:100
+			t1 : 0,
+			t2 : 100,
+			p : 0,
+			z : 100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 0 );
-		equals( o.t2, 100 );
+		equals(o.t1, 0);
+		equals(o.t2, 100);
 	});
 	test("calcNewTimesFromPanZoom test 2", function() {
 		var i = {
-			t1:0,
-			t2:100,
-			p:50,
-			z:100
+			t1 : 0,
+			t2 : 100,
+			p : 50,
+			z : 100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, -50 );
-		equals( o.t2, 50 );
+		equals(o.t1, -50);
+		equals(o.t2, 50);
 	});
 	test("calcNewTimesFromPanZoom test 3", function() {
 		var i = {
-			t1:0,
-			t2:100,
-			p:100,
-			z:100
+			t1 : 0,
+			t2 : 100,
+			p : 100,
+			z : 100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, -100 );
-		equals( o.t2, 0 );
+		equals(o.t1, -100);
+		equals(o.t2, 0);
 	});
 	test("calcNewTimesFromPanZoom test 4", function() {
 		var i = {
-			t1:0,
-			t2:100,
-			p:0,
-			z:50
+			t1 : 0,
+			t2 : 100,
+			p : 0,
+			z : 50
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, -50 );
-		equals( o.t2, 150 );
+		equals(o.t1, -50);
+		equals(o.t2, 150);
 	});
 	test("calcNewTimesFromPanZoom test 5", function() {
 		var i = {
-			t1:0,
-			t2:100,
-			p:0,
-			z:200
+			t1 : 0,
+			t2 : 100,
+			p : 0,
+			z : 200
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 25 );
-		equals( o.t2, 75 );
+		equals(o.t1, 25);
+		equals(o.t2, 75);
 	});
 	test("calcNewTimesFromPanZoom test 6", function() {
 		var i = {
-			t1:50,
-			t2:100,
-			p:-100,
-			z:100
+			t1 : 50,
+			t2 : 100,
+			p : -100,
+			z : 100
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, 100 );
-		equals( o.t2, 150 );
+		equals(o.t1, 100);
+		equals(o.t2, 150);
 	});
 	test("calcNewTimesFromPanZoom test 7", function() {
 		var i = {
-			t1:50,
-			t2:100,
-			p:100,
-			z:50
+			t1 : 50,
+			t2 : 100,
+			p : 100,
+			z : 50
 		}
 		var o = h.calcNewTimesFromPanZoom(i);
-		equals( o.t1, -25 );
-		equals( o.t2, 75 );
+		equals(o.t1, -25);
+		equals(o.t2, 75);
 	});
 	test("calcNewTimes test 1", function() {
 		var i = {
-			t1:50,
-			t2:100,
-			o: {
-				l:0,
-				r:100
+			t1 : 50,
+			t2 : 100,
+			o : {
+				l : 0,
+				r : 100
 			},
-			n: {
-				l:0,
-				r:100
+			n : {
+				l : 0,
+				r : 100
 			}
 		}
 		var o = h.calcNewTimes(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 100 );
+		equals(o.t1, 50);
+		equals(o.t2, 100);
 	});
 	test("calcNewTimes test 2", function() {
 		var i = {
-			t1:100,
-			t2:200,
-			o: {
-				l:0,
-				r:100
+			t1 : 100,
+			t2 : 200,
+			o : {
+				l : 0,
+				r : 100
 			},
-			n: {
-				l:25,
-				r:75
+			n : {
+				l : 25,
+				r : 75
 			}
 		}
 		var o = h.calcNewTimes(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 250 );
+		equals(o.t1, 50);
+		equals(o.t2, 250);
 	});
 	test("calcNewTimes test 3", function() {
 		var i = {
-			t1:100,
-			t2:200,
-			o: {
-				l:0,
-				r:50
+			t1 : 100,
+			t2 : 200,
+			o : {
+				l : 0,
+				r : 50
 			},
-			n: {
-				l:50,
-				r:100
+			n : {
+				l : 50,
+				r : 100
 			}
 		}
 		var o = h.calcNewTimes(i);
-		equals( o.t1, 50 );
-		equals( o.t2, 150 );
+		equals(o.t1, 50);
+		equals(o.t2, 150);
 	});
 	test("calcNewTimes test 4", function() {
 		var i = {
-			t1:100,
-			t2:200,
-			o: {
-				l:50,
-				r:100
+			t1 : 100,
+			t2 : 200,
+			o : {
+				l : 50,
+				r : 100
 			},
-			n: {
-				l:0,
-				r:50
+			n : {
+				l : 0,
+				r : 50
 			}
 		}
 		var o = h.calcNewTimes(i);
-		equals( o.t1, 150 );
-		equals( o.t2, 250 );
+		equals(o.t1, 150);
+		equals(o.t2, 250);
 	});
 	test("calcNewTimes test 5", function() {
 		var i = {
-			t1:100,
-			t2:200,
-			o: {
-				l:25,
-				r:75
+			t1 : 100,
+			t2 : 200,
+			o : {
+				l : 25,
+				r : 75
 			},
-			n: {
-				l:0,
-				r:100
+			n : {
+				l : 0,
+				r : 100
 			}
 		}
 		var o = h.calcNewTimes(i);
-		equals( o.t1, 125 );
-		equals( o.t2, 175 );
+		equals(o.t1, 125);
+		equals(o.t2, 175);
+	});
+};
+
+DateUtilitiesTests = function() {
+	module("Date utilities tests");
+	test("can convert from date to position and back 1", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2011, 5, 22));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2011-06-22");
+	});
+	test("can convert from date to position and back 2", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 0, 1));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-01-01");
+	});
+	test("can convert from date to position and back 3", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 1, 1));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-02-01");
+	});
+	test("can convert from date to position and back 4", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 5, 1));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-06-01");
+	});
+	test("can convert from date to position and back 5", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2011, 0, 1));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2011-01-01");
+	});
+	test("can convert from date to position and back 6", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2009, 0, 1));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2009-01-01");
+	});
+	test("can convert from date to position and back 7", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 0, 5));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-01-05");
+	});
+	test("can convert from date to position and back 8", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 0, 10));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-01-10");
+	});
+	test("can convert from date to position and back 9", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 0, 15));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-01-15");
+	});
+	test("can convert from date to position and back 10", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 1, 1));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-02-01");
+	});
+	test("can convert from date to position and back 11", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 1, 15));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-02-15");
+	});
+	test("can convert from date to position and back 12", function() {
+		var p = DateUtilities.PositionFromDate(new Date(2010, 1, 25));
+		var d = DateUtilities.DateFromPosition(p);
+		equals(d.toString("yyyy-MM-dd"), "2010-02-25");
 	});
 };

@@ -10,7 +10,7 @@
 			return -1;
 		}
 	}
- 
+
 	target["AsyncCache"] = function(arg) {
 
 		var p = {
@@ -41,13 +41,13 @@
 					p.loading.splice(k, 1);
 		}
 
-		var ret = {};
-
-		ret["addProvider"] = function(cb) {
+		this["addProvider"] = function(cb) {
 			p.providers.push(cb);
 		};
 
-		ret["set"] = function(key, value) {
+		this["set"] = function(key, value) {
+			// console.log('AsyncCache: got data for key:' + key, value);
+
 			p.data[key] = value;
 			// mark as loaded.
 			p.unmarkLoading(key);
@@ -60,8 +60,8 @@
 					calls.push(p.queue[k].callback);
 				}
 			// remove them from queue.
-			for ( var k = rq.length - 1; k >= 0; k--)
-				p.queue.splice(rq[k]);
+			for ( var k = idxs.length - 1; k >= 0; k--)
+				p.queue.splice(idxs[k]);
 			// call the callbacks
 			setTimeout(function() {
 				for ( var k = 0; k < calls.length; k++)
@@ -69,7 +69,7 @@
 			}, 0);
 		};
 
-		ret["get"] = function(key, cb) {
+		this["get"] = function(key, cb) {
 
 			// already cached?
 			if (typeof (p.data[key]) != 'undefined') {
@@ -89,16 +89,18 @@
 			if (p.isLoading(key))
 				return;
 
+			// console.log('AsyncCache: get data for key:' + key);
+
 			// mark as loading..
 			p.markLoading(key);
 
 			// tell all providers to start loading...
 			for ( var k = 0; k < p.providers.length; k++) {
-				p.providers.apply(this, [ ret, key ]);
+				p.providers[k].apply(this, [ this, key ]);
 			}
 		};
-
-		return ret;
 	}
+
+	target["AsyncCache"] = AsyncCache;
 
 })(window);

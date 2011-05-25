@@ -1,30 +1,81 @@
 $(document).ready(function() {
 
+	var eventdb = new EventDB('./{0}.js');
+
 	var outerel = $('#timeline');
 	var timelineel = $('.innertimeline', outerel);
 	var eventsel = $('.events', outerel);
 	var cursorel = $('.cursor', outerel);
 	var todayel = $('.today', outerel);
-
-	var today_time = 50;
-	var cursor_time = today_time + 10;
+	var last_month = '';
 
 	var tc = new TimelineController();
 	var tic = new TimelineInputController(outerel, tc);
 	var ep = new EventPacker();
 
+	var dragging = false;
+	var dragtimer = -1;
+	var counter = 0;
+	/* var allitems = []; */
+
+	var today_date = Date.today();
+	var today_time = DateUtilities.PositionFromDate(today_date);
+	var cursor_time = today_time + 0;
+
+	function repositionEventElement(el, event) {
+		var ppo = Math.round(tc.getDisplayOffset());
+		var lp = Math.round(tc.getPositionFromTime(event.left) + ppo);
+		var rp = Math.round(tc.getPositionFromTime(event.right) + ppo);
+		// console.log(event.title, lp, rp);
+		var wp = rp - lp;
+		el.css( {
+			left : lp + 'px',
+			width : wp + 'px'
+		});
+	}
+
 	updatecursorlabel = function() {
 		var cc = tc.getTimeCenter();
-		$('.label', cursorel).html("M&Aring;, 3 FEB " + cc);
+		var cd = DateUtilities.DateFromPosition(cc);
+		$('.label', cursorel).html(cd.toString("ddd d MMM, yyyy"));
+		eventdb.ensureCache(cd.toString('yyyy-MM'));
+		var lmt = cd.toString("yyyy-MM");
+		if (lmt == last_month)
+			return false;
+		last_month = lmt;
+		return true;
 	}
-	regeneratepoints = function() {
 
+	regeneratepoints = function() {
 		var el1 = $('<div>');
+		var cp = tc.getTimeCenter();
+		var cd = DateUtilities.DateFromPosition(cp);
+
+		var startdate = (new Date(cd)).addMonths(-3);
+		var enddate = (new Date(cd)).addMonths(3);
+
+		var mon1 = parseInt(startdate.toString("yyyy")) * 12
+				+ parseInt(startdate.toString("M")) - 1;
+
+		var mon2 = parseInt(enddate.toString("yyyy")) * 12
+				+ parseInt(enddate.toString("M")) - 1;
+
+		// console.log(mon1, mon2);
+
 		var ppo = tc.getDisplayOffset();
-		// console.log('scale: ppo='+ppo);
-		for ( var k = 0; k < 50; k++) {
-			var d = k * 10;
-			var x = tc.getPositionFromTime(d) - ppo;
+		var cc = tc.getTimeCenter();
+		// console.log('ppo=' + ppo + ', cc=' + cc);
+		for ( var k = mon1; k <= mon2; k++) {
+			var y = Math.floor(k / 12);
+			var m = k - (y * 12);
+			var d = new Date(y, m, 1);
+
+			eventdb.ensureCache(d.toString('yyyy-MM'));
+
+			var d2 = DateUtilities.PositionFromDate(d);
+			var x = Math.round(tc.getPositionFromTime(d2) + ppo);
+			// console.log(d, d2, x);
+			// var x = tc.getPositionFromTime(d2);
 			var el2 = $('<div>');
 			el2.addClass('bottommarker');
 			el2.addClass('month');
@@ -34,34 +85,21 @@ $(document).ready(function() {
 			});
 			var el3 = $('<div>');
 			el3.addClass('label');
-			el3.text(d.toString());
+			el3.text(d.toString("MMM yyyy"));
 			el2.append(el3);
 			el3 = $('<div>');
 			el3.addClass('line');
 			el2.append(el3);
 			el1.append(el2);
 		}
-
-		for ( var k = 0; k < 20; k++) {
-			var d = k * 14;
-			var x = tc.getPositionFromTime(d) - ppo;
-			var el2 = $('<div>');
-			el2.addClass('bottommarker');
-			el2.addClass('week');
-			el2.css( {
-				position : 'absolute',
-				left : x + 'px'
-			});
-			var el3 = $('<div>');
-			el3.addClass('label');
-			el3.text(d.toString());
-			el2.append(el3);
-			el3 = $('<div>');
-			el3.addClass('line');
-			el2.append(el3);
-			el1.append(el2);
-		}
-
+		/*
+		 * for ( var k = 0; k < 20; k++) { var d = k * 14; var x =
+		 * tc.getPositionFromTime(d) - ppo; var el2 = $('<div>');
+		 * el2.addClass('bottommarker'); el2.addClass('week'); el2.css( {
+		 * position : 'absolute', left : x + 'px' }); var el3 = $('<div>');
+		 * el3.addClass('label'); el3.text(d.toString()); el2.append(el3); el3 =
+		 * $('<div>'); el3.addClass('line'); el2.append(el3); el1.append(el2); }
+		 */
 		timelineel.empty().append(el1);
 		el1.addClass('innertimeline');
 
@@ -80,6 +118,14 @@ $(document).ready(function() {
 				width : wp + 'px'
 			});
 		}
+
+		var all = eventdb.getAll();
+		for ( var i = 0; i < all.length; i++) {
+			var event = all[i];
+			var el = $('#' + event.id);
+			repositionEventElement(el, event);
+		}
+
 	}
 	positionpoints = function() {
 		// if( Modernizr.touch ){
@@ -88,7 +134,7 @@ $(document).ready(function() {
 		// }
 		var ppo = Math.round(tc.getDisplayOffset());
 		var yo = 40 - Math.round(tc.getLineOffset());
-		// console.log('pan: ppo='+ppo);
+		// console.log('pan: ppo=' + ppo + ', yo=' + yo);
 		timelineel.css( {
 			position : 'absolute',
 			left : -ppo + 'px'
@@ -108,119 +154,124 @@ $(document).ready(function() {
 			position : 'absolute',
 			left : x + 'px'
 		});
-		updatecursorlabel();
+		return updatecursorlabel();
 	}
+
 	tc.addListener(function(e) {
-		positionpoints();
-		if (e.zoomed)
+		var forceregen = positionpoints();
+		if (e.zoomed || forceregen)
 			regeneratepoints();
 	});
 	ep.addListener(function(arg) {
+		// console.log('animation event', arg);
 		for ( var i = 0; i < arg.create.length; i++) {
-			var domid = arg.create[i];
-			var item = ep.getItem(domid);
-			$('#' + domid).css( {
+			var id = arg.create[i];
+			var item = eventdb.get(id);
+			var item2 = ep.getItem(id);
+			// console.log('create', id, item, item2);
+			// var item = ep.getItem(event.clientid);
+			$('#' + item.clientid).css( {
 				height : '1px',
-				top : (item.line * 40) + 'px',
+				top : (item2.line * 40) + 'px',
 				opacity : 0
 			});
-			$('#' + domid).animate( {
+			$('#' + item.clientid).animate( {
 				height : '30px',
 				opacity : 1
 			}, 200, 'easeInOutQuart');
 		}
 
 		for ( var i = 0; i < arg.show.length; i++) {
-			var domid = arg.show[i];
-			var item = ep.getItem(domid);
-			$('#' + domid).animate( {
+			var id = arg.show[i];
+			var item = eventdb.get(id);
+			// console.log('show', id, item);
+			$('#' + item.clientid).animate( {
 				opacity : 1
 			}, 200, 'easeInOutQuart');
 		}
 
 		for ( var i = 0; i < arg.hide.length; i++) {
-			var domid = arg.hide[i];
-			var item = ep.getItem(domid);
-			$('#' + domid).animate( {
+			var id = arg.hide[i];
+			var item = eventdb.get(id);
+			// console.log('hide', id, item);
+			$('#' + item.clientid).animate( {
 				opacity : 0
 			}, 200, 'easeInOutQuart');
 		}
 
 		for ( var i = 0; i < arg.move.length; i++) {
-			var domid = arg.move[i];
-			var item = ep.getItem(domid);
-			$('#' + domid).animate( {
-				top : (item.line * 40) + 'px'
+			var id = arg.move[i];
+			var item = eventdb.get(id);
+			var item2 = ep.getItem(id);
+			// console.log('move', id, item, item2);
+			// var item = ep.getItem(event.clientid);
+			$('#' + item.clientid).animate( {
+				top : (item2.line * 40) + 'px'
 			}, 400, 'easeOutBounce');
 		}
 	});
 
 	function showdetails(id) {
-		alert("show details for " + id);
+		// alert("show details for " + id);
+		var el = $('#' + id);
+		var id2 = el.attr('id2');
+		// console.log('id2', id2);
+		var event = eventdb.get(id2);
+		// console.log('event', event);
+		alert('clicked on \"' + event.title + '\" (' + event.id + ')\n\n'
+				+ event.start + ' -> ' + event.end + ' ');
 	}
 
-	var dragging = false;
-	var dragtimer = -1;
+	eventdb.addNewEventsListener(function(event) {
+		var ld = Date.parseExact(event.start, "yyyy-MM-dd");
+		var rd = Date.parseExact(event.end, "yyyy-MM-dd").addDays(1);
+		var lt = DateUtilities.PositionFromDate(ld);
+		var rt = DateUtilities.PositionFromDate(rd);
 
-	function addsome() {
-		var newitems = [];
-		var n = 1 + Math.round(Math.random() * 4);
-		for ( var i = 0; i < n; i++) {
-			var lt = 2 + Math.round(Math.random() * 40) * 4;
-			var wt = 3 + Math.round(Math.random() * 40) * 4;
-			var rt = lt + wt;
-			var lp = Math.round(tc.getPositionFromTime(lt));
-			var rp = Math.round(tc.getPositionFromTime(rt));
-			var wp = rp - lp;
-			var el = $('<div>');
-			el.addClass('block');
-			var id = 'x' + counter;
-			el.attr('id', id);
-			el.css( {
-				left : lp + 'px',
-				width : wp + 'px',
-				top : '40px'
-			});
-			el.html('<div>#' + id + '</div>');
+		var el = $('<div>');
+		el.addClass('block');
+		var id = 'x' + (counter++);
+		el.attr('id', id);
+		el.attr('id2', event.id);
+		el.css( {
+			top : '40px',
+			height : '40px'
+		});
+		el.html('<div>' + event.title + '</div>');
+
+		(function() {
+			var id2 = id;
 			if (Modernizr.touch) {
 				el.bind("touchend", function() {
 					if (!dragging)
-						showdetails(id);
+						showdetails(id2);
 				});
 			} else {
 				el.bind('mouseup', function() {
 					if (!dragging)
-						showdetails(id);
+						showdetails(id2);
 				});
 			}
+		})();
+
+		event.clientid = id;
+		event.left = lt;
+		event.right = rt;
+
+		// console.log('created element', event, el);
+			repositionEventElement(el, event);
+
 			eventsel.append(el);
-			newitems.push( {
-				id : id,
-				left : lt,
-				right : rt,
-				customdata : counter
-			});
-			counter++;
-		}
-		ep.addItems(newitems);
 
-	}
-
-	var allitems = [];
-	var counter = 0;
-
-	addsome();
-	addsome();
-	addsome();
-	addsome();
-
-	tc.setTimeCenter(50, 50);
+			ep.addItems( [ event ]);
+		});
 
 	positionpoints();
 	regeneratepoints();
+	tc.setTimeCenter(today_time, 40);
 
 	$('#today').click(function() {
-		tic.animateTo(1 * 40);
+		tic.animateTo(today_time);
 	});
 	$('#sum2011').click(function() {
 		tic.animateTo(1 * 10);
