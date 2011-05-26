@@ -13,8 +13,12 @@
 		p.cache.addProvider(function(cache, key) {
 			// console.log('EventDB: try to get from cache:', cache, key);
 				var u = linkformat.replace('{0}', key);
-				$.getJSON(u, function(data) {
-					cache.set(data.date, data.events);
+				$.ajax( {
+					url : u,
+					dataType : 'jsonp',
+					success : function(data) {
+						cache.set(data.date, data.events);
+					}
 				});
 			});
 

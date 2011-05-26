@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var eventdb = new EventDB('./{0}.js');
+	var eventdb = new EventDB('http://festivalkalendern.se/db.php?date={0}');
 
 	var outerel = $('#timeline');
 	var timelineel = $('.innertimeline', outerel);
@@ -164,52 +164,52 @@ $(document).ready(function() {
 	});
 	ep.addListener(function(arg) {
 		// console.log('animation event', arg);
-		for ( var i = 0; i < arg.create.length; i++) {
-			var id = arg.create[i];
-			var item = eventdb.get(id);
-			var item2 = ep.getItem(id);
-			// console.log('create', id, item, item2);
-			// var item = ep.getItem(event.clientid);
-			$('#' + item.clientid).css( {
-				height : '1px',
-				top : (item2.line * 40) + 'px',
-				opacity : 0
-			});
-			$('#' + item.clientid).animate( {
-				height : '30px',
-				opacity : 1
-			}, 200, 'easeInOutQuart');
-		}
+			for ( var i = 0; i < arg.create.length; i++) {
+				var id = arg.create[i];
+				var item = eventdb.get(id);
+				var item2 = ep.getItem(id);
+				// console.log('create', id, item, item2);
+				// var item = ep.getItem(event.clientid);
+				$('#' + item.clientid).css( {
+					height : '1px',
+					top : (item2.line * 40) + 'px',
+					opacity : 0
+				});
+				$('#' + item.clientid).animate( {
+					height : '30px',
+					opacity : 1
+				}, 200, 'easeInOutQuart');
+			}
 
-		for ( var i = 0; i < arg.show.length; i++) {
-			var id = arg.show[i];
-			var item = eventdb.get(id);
-			// console.log('show', id, item);
-			$('#' + item.clientid).animate( {
-				opacity : 1
-			}, 200, 'easeInOutQuart');
-		}
+			for ( var i = 0; i < arg.show.length; i++) {
+				var id = arg.show[i];
+				var item = eventdb.get(id);
+				// console.log('show', id, item);
+				$('#' + item.clientid).animate( {
+					opacity : 1
+				}, 200, 'easeInOutQuart');
+			}
 
-		for ( var i = 0; i < arg.hide.length; i++) {
-			var id = arg.hide[i];
-			var item = eventdb.get(id);
-			// console.log('hide', id, item);
-			$('#' + item.clientid).animate( {
-				opacity : 0
-			}, 200, 'easeInOutQuart');
-		}
+			for ( var i = 0; i < arg.hide.length; i++) {
+				var id = arg.hide[i];
+				var item = eventdb.get(id);
+				// console.log('hide', id, item);
+				$('#' + item.clientid).animate( {
+					opacity : 0
+				}, 200, 'easeInOutQuart');
+			}
 
-		for ( var i = 0; i < arg.move.length; i++) {
-			var id = arg.move[i];
-			var item = eventdb.get(id);
-			var item2 = ep.getItem(id);
-			// console.log('move', id, item, item2);
-			// var item = ep.getItem(event.clientid);
-			$('#' + item.clientid).animate( {
-				top : (item2.line * 40) + 'px'
-			}, 400, 'easeOutBounce');
-		}
-	});
+			for ( var i = 0; i < arg.move.length; i++) {
+				var id = arg.move[i];
+				var item = eventdb.get(id);
+				var item2 = ep.getItem(id);
+				// console.log('move', id, item, item2);
+				// var item = ep.getItem(event.clientid);
+				$('#' + item.clientid).animate( {
+					top : (item2.line * 40) + 'px'
+				}, 400, 'easeOutBounce');
+			}
+		});
 
 	function showdetails(id) {
 		// alert("show details for " + id);
