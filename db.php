@@ -8,9 +8,12 @@ $json_ttl = 7*60;
 
 $date = "2011-01";
 if( isset( $argv[1] ) )
-$date = $argv[1];
+	$date = $argv[1];
 if( isset( $_GET["date"] ) )
-$date = $_GET["date"];
+	$date = $_GET["date"];
+$callback = "";
+if( isset( $_GET["callback"] ) )	
+	$callback = $_GET["callback"];
 $t = strptime($date, "%Y-%m");
 // $t = strptime($date, "%Y");
 $ts1 = mktime( 0,0,0, $t["tm_mon"]+1,1,$t["tm_year"]+1900 );
@@ -160,6 +163,9 @@ foreach( $data->events as $evt ) {
 
 }
 $json_data = json_encode( $newdata );
+if( $callback!="" )
+echo $callback."(".$json_data.");";
+else
 echo $json_data;
 // echo "\n<!-- \n";
 // print_r( $newdata );
