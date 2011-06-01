@@ -9,7 +9,7 @@
 		<meta name="viewport" content = "width=device-width, maximum-scale=1, user-scalable=0, user-scalable=no" />
 		<link rel="stylesheet" href="styles/festivalkalendern.css" type="text/css"/>
 		<style type="text/css">
-			<?php echo ".background { background-image:url(images/".(1+rand()%9).".jpg); };"; ?>
+			<?php echo ".background { background-image:url(images/".(1+rand()%8).".jpg); };"; ?>
 		</style>
 	</head>
 	<body scroll="no">
