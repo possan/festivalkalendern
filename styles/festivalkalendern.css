@@ -1,0 +1,413 @@
+@import url(http://fonts.googleapis.com/css?family=Lobster);
+h1 {
+    font-family: 'Lobster', serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    text-shadow: none;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: -0.037em;
+    word-spacing: -0.007em;
+    line-height: 1.2;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+/*    height: 1000px;*/
+    overflow: hidden;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    font: 10pt Arial;
+    background-color: #000;
+}
+
+#header {
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    background-color: #678;
+    overflow: hidden;
+}
+
+#header h1 {
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    text-shadow: 0px 1px 1px #000;
+}
+
+#header p.bigbuttons {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    right: 10px;
+    top: 0px;
+}
+
+#header p.bigbuttons a {
+    position: relative;
+    margin: 0 10px 0 0;
+    width: 40px;
+    display: inline-block;
+    padding: 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+#header p.bigbuttons a big {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    left: 0px;
+    top: -10px;
+    font-size: 14pt;
+    text-align: center;
+    width: 40px;
+}
+
+#header p.bigbuttons a span {
+    position: absolute;
+    left: 0px;
+    top: 15px;
+    width: 40px;
+    text-align: center;
+    font-size: 6pt;
+}
+
+#header p.actions {
+    position: absolute;
+    left: 10px;
+    top: 70px;
+}
+
+#header .tagwindow {
+    position: absolute;
+    right: 20px;
+    top: -250px;
+    height: 300px;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+}
+
+#header p.tags {
+    color: #aaa;
+}
+
+#header a#toggletagwindow {
+    color: #fff;
+    position: absolute;
+    display: block;
+    text-align: center;
+    width: 300px;
+    height: 20px;
+    left: 0px;
+    top: 280px;
+}
+
+#footer {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+}
+
+#footer p {
+    display: block;
+    text-align: right;
+    color: #aaa;
+    padding: 4px 10px;
+    font: 8pt Helvetica, Arial;
+    margin: 0;
+    text-shadow: 0px 1px 0px #000;
+}
+
+#footer p b {
+    color: #fff;
+}
+
+#footer p a {
+    color: #fff;
+}
+
+.events {
+    position: absolute;
+    top: 60px;
+    width: 100%;
+    height: 100%;
+    /*  -webkit-transition: all 0.5s ease-in-out;
+     -moz-transition: all 0.5s ease-in-out;
+     -o-transition: all 0.5s ease-in-out;
+     */
+}
+
+.events .block {
+    position: absolute;
+    background-color: #cf8;
+    height: 20px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    /*overflow: hidden;*/
+    white-space: nowrap;
+    cursor: pointer;
+    /*-webkit-transition: all 0.5s ease-in-out;
+     -moz-transition: all 0.5s ease-in-out;
+     -o-transition: all 0.5s ease-in-out;
+     */
+}
+
+.events .block span {
+    display: block;
+    padding: 6px 10px;
+    font: 11pt Helvetica, Arial, Verdana;
+    color: #333;
+}
+
+.actions {
+    padding: 10px;
+    margin: 0;
+    color: #888;
+}
+
+.actions a {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #4ac;
+    font: 10pt Helvetica, Arial;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    cursor: pointer;
+}
+
+.actions a:hover {
+    background-color: #6cf;
+}
+
+.outertimeline {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    margin: 0;
+}
+
+.innertimeline {
+    display: block;
+    height: 200px;
+    position: absolute;
+    /*    -webkit-transition: all 0.5s ease-in-out;
+     -moz-transition: all 0.5s ease-in-out;
+     -o-transition: all 0.5s ease-in-out;*/
+}
+
+/*
+ .year {
+ position: absolute;
+ width: 40px;
+ height: 12px;
+ background-color: #f00;
+ color: #fff;
+ top: 10px;
+ }
+ 
+ .month {
+ position: absolute;
+ width: 40px;
+ background-color: #f00;
+ color: #fff;
+ top: 0px;
+ padding: 2px 4px;
+ }
+ */
+.week {
+    position: absolute;
+    top: 21px;
+}
+
+.marker {
+    position: absolute;
+    width: 150px;
+    height: 10px;
+}
+
+.marker .line {
+    position: absolute;
+    width: 1px;
+    height: 1024px;
+    z-index: 9;
+}
+
+.marker .label {
+    position: absolute;
+    padding: 2px 4px;
+    font: 8pt Helvetica, Arial;
+    z-index: 9;
+}
+
+.bottommarker {
+    position: absolute;
+    width: 150px;
+    height: 10px;
+}
+
+.bottommarker .line {
+    position: absolute;
+    width: 1px;
+    height: 1024px;
+}
+
+.bottommarker .label {
+    position: absolute;
+    padding: 2px 4px;
+    font: 8pt Helvetica, Arial;
+}
+
+.marker.cursor .line, .marker.cursor .label {
+    background-color: #ff0;
+    color: #220;
+}
+
+.marker.today .line, .marker.today .label {
+    background-color: #05c;
+    color: #fff;
+}
+
+.bottommarker.week .label {
+    background-color: #485;
+    color: #fff; 
+	z-index: 9;
+}
+
+.bottommarker.week .line {
+    color: #000;
+    border-left: 1px solid #485;
+}
+
+.bottommarker.month .line {
+    border-left: 1px solid #0a0;
+    color: #fff;
+}
+
+.bottommarker.month .label {
+    background-color: #0a0;
+    color: #fff;
+	z-index: 9;
+}
+
+div#dimmer {
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: #333;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+}
+
+div.dropdown {
+    display: none;
+    padding: 0px;
+    position: absolute;
+    top: -500px;
+    left: 0px;
+    width: 100%;
+    z-index: 99;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    text-align: center;
+}
+
+div.dropdown div.content {
+    position: relative;
+    margin: 0 auto;
+    text-align: left;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -moz-bottom-left-border-radius: 10px;
+    -moz-bottom-right-border-radius: 10px;
+    -webkit-bottom-left-border-radius: 10px;
+    -webkit-bottom-right-border-radius: 10px;
+}
+
+div.dropdown div.content a {
+    color: #8cf;
+}
+
+div.dropdown#aboutdropdown div.content {
+    width: 300px;
+}
+
+div.dropdown#favouritesdropdown div.content {
+    width: 300px;
+}
+
+div.dropdown#tagsdropdown div.content {
+    width: 450px;
+}
+
+div.wrapper{
+	position: relative;
+	margin: 0;
+	padding: 0;
+	width: 50%;
+	height: 50%;
+}
+div.centerbadge{
+	position: absolute;
+	right: -200px;
+	width: 400px;
+	bottom: -70px;
+	background-color: rgba(0,0,0,0.4);
+	color: #fff;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+}
+div.background{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-attachment: fixed;
+	background-position: center center;
+}
+div.centerbadge h1 {
+	font-size: 40pt;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+div.centerbadge p{
+	text-align: center;
+}
