@@ -15,16 +15,17 @@ h1 {
 html {
     margin: 0;
     padding: 0;
-    height: 1000px;
+    height: 100%;
+/*    height: 1000px;*/
     overflow: hidden;
 }
 
 body {
     padding: 0;
     margin: 0;
-    height: 1000px;
+    height: 100%;
     font: 10pt Arial;
-    background-color: #234;
+    background-color: #000;
 }
 
 #header {
@@ -371,4 +372,42 @@ div.dropdown#favouritesdropdown div.content {
 
 div.dropdown#tagsdropdown div.content {
     width: 450px;
+}
+
+div.wrapper{
+	position: relative;
+	margin: 0;
+	padding: 0;
+	width: 50%;
+	height: 50%;
+}
+div.centerbadge{
+	position: absolute;
+	right: -200px;
+	width: 400px;
+	bottom: -70px;
+	background-color: rgba(0,0,0,0.4);
+	color: #fff;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+}
+div.background{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-attachment: fixed;
+	background-position: center center;
+}
+div.centerbadge h1 {
+	font-size: 40pt;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+div.centerbadge p{
+	text-align: center;
 }
