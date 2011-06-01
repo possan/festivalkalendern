@@ -8,10 +8,13 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 		<meta name="viewport" content = "width=device-width, maximum-scale=1, user-scalable=0, user-scalable=no" />
 		<link rel="stylesheet" href="festivalkalendern.css" type="text/css"/>
+		<style type="text/css">
+			<?php echo ".background { background-image:url(images/".(1+rand()%9).".jpg); };"; ?>
+		</style>
 	</head>
 	<body scroll="no">
-			<div class="background" style="background-image:url(images/1.jpg);">
-			</div>
+		<div class="background">
+		</div>
 		<div class="wrapper">
 			<div class="centerbadge">
 				<div class="inner">
