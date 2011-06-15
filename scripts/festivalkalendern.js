@@ -268,7 +268,7 @@ $(document).ready(function() {
 
 	positionpoints();
 	regeneratepoints();
-	tc.setTimeCenter(today_time, 40);
+	tc.setTimeCenter(today_time, 17);
 
 	$('#today').click(function() {
 		tic.animateTo(today_time);

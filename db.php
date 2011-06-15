@@ -1,5 +1,8 @@
 <?php
 
+        include dirname( __FILE__ ) . '/phpillow/bootstrap.php';
+        phpillowConnection::createInstance('www2.sour.se', 5984, '', '');
+
 $ical_url = "http://www.google.com/calendar/ical/sour.se_3ncttv6e3n5im5gvpepto9etls%40group.calendar.google.com/public/basic.ics";
 $ical_file = "/tmp/basic.ics";
 $ical_ttl = 6*60;
@@ -60,6 +63,68 @@ header( "Pragma: public" );
 header( "Last-Modified: ".gmdate("D, d M Y H:i:s", $json_mtime)." GMT");
 header( "Cache-Control: maxage=".$expires );
 header( 'Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT' );
+
+$couchpath = "/events/_view/events/by-month/?group=true&startkey=%22".$date."%22&endkey=%22".$date."%22";
+$data = phpillowConnection::getInstance()->get($couchpath);
+
+//  print_r( $data );
+// $couchurl = "http://www2.sour.se:5984/events/_view/events/by-month/?group=true&startkey=%22".$date."%22&endkey=%22".$date."%22";
+// $json = join("",file($couchurl));
+// echo $json;
+// $data = json_decode( $json );
+// print_r( $data );
+
+$newdata = new stdclass();
+$newdata->events = array();
+$newdata->date = $date;
+$newdata->random = rand();
+$newdata->start_ts = $ts1;
+$newdata->end_ts = $ts2;
+$newdata->start = format_json_date( $ts1 );
+$newdata->end = format_json_date( $ts2 );
+// print_r( $data );
+
+foreach( $data->rows[0]["value"] as $id ) {
+
+// print_r( $evt );
+// echo "\n";
+$evt = phpillowConnection::getInstance()->get("/events/event-".$id);
+// print_r( $evt );
+// echo "<br/>";
+
+	$newevt = new stdClass();
+	$newevt->id = $evt->id;
+	$newevt->title = $evt->title;
+	$newevt->test = rand();
+	$newevt->metadata = array();
+	$newevt->start_ts = strtotime( $evt->startDate );
+	if( isset( $evt->endDate ) )
+		$newevt->end_ts = strtotime( $evt->endDate );
+	else
+		$newevt->end_ts = $newevt->start_ts+(24*60*60);
+	$newevt->start = format_json_date( $newevt->start_ts );
+	$newevt->end = format_json_date( $newevt->end_ts );
+
+//	$ets1 = $evt->start_ts;
+//	$ets2 = $evt->end_ts;
+
+//	if( ($ets1 >= $ts1 && $ets2 < $ts2 ) )
+		$newdata->events[] = $newevt;
+//	else if( ($ets1 < $ts1 && $ets2 > $ts1 && $ets2 < $ts2 ) )
+//		$newdata->events[] = $evt;
+//	else if( ($ets1 >= $ts1 && $ets1 < $ts2 && $ets2 > $ts2 ) )
+//		$newdata->events[] = $evt;
+
+}
+$json_data = json_encode( $newdata );
+$data = json_decode( $json_data );
+if( $callback!="" )
+echo $callback."(".$json_data.");";
+else
+echo $json_data;
+
+die( "" );
+
 
 // header( "Cache-Control: must-revalidate" );
 
@@ -139,30 +204,6 @@ $json_data = file_get_contents( $json_file );
 
 // filter events
 $data = json_decode( $json_data );
-$newdata = new stdclass();
-$newdata->events = array();
-$newdata->date = $date;
-$newdata->random = rand();
-$newdata->start_ts = $ts1;
-$newdata->end_ts = $ts2;
-$newdata->start = format_json_date( $ts1 );
-$newdata->end = format_json_date( $ts2 );
-// print_r( $data );
-foreach( $data->events as $evt ) {
-	$evt->test = rand();
-
-	$ets1 = $evt->start_ts;
-	$ets2 = $evt->end_ts;
-
-	if( ($ets1 >= $ts1 && $ets2 < $ts2 ) )
-	$newdata->events[] = $evt;
-	else if( ($ets1 < $ts1 && $ets2 > $ts1 && $ets2 < $ts2 ) )
-	$newdata->events[] = $evt;
-	else if( ($ets1 >= $ts1 && $ets1 < $ts2 && $ets2 > $ts2 ) )
-	$newdata->events[] = $evt;
-
-}
-$json_data = json_encode( $newdata );
 if( $callback!="" )
 echo $callback."(".$json_data.");";
 else
